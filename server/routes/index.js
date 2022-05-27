@@ -5,17 +5,20 @@ const { validator, registrationSchema } = require('../middleware/validation');
 
 const router = express.Router();
 
-router.get(
-  '/tag', 
-  async (req, res) => {
-    try {
-      let results = await db.allTags();
-      res.json(results);
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
+async function handleDbQuery(query, req, res) {
+  try {
+    let results = await query();
+    res.json(results);
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500);
   }
+};
+
+router.get(
+  '/tag',
+  (req, res) => 
+    handleDbQuery(() => db.allTags(), req, res)
 );
 
 router.post(
@@ -27,32 +30,14 @@ router.post(
       .isLength({ min: 3 })
       .withMessage("La descrizione deve essere di almeno 3 caratteri.")
   ]),
-  async (req, res) => {
-    try {
-      if (req.body.descrizione) {
-        let results = await db.insertTag(req.body.descrizione);
-        res.json(results);
-      } else {
-        
-      }
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.allTags(req.body.descrizione), req, res)
 );
 
 router.get(
   '/citta', 
-  async (req, res) => {
-    try {
-      let results = await db.allCitta();
-      res.json(results);
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.allCitta(), req, res)
 );
 
 router.post(
@@ -62,83 +47,44 @@ router.post(
       .exists()
       .withMessage("Descrizione mancante")
   ]),
-  async (req, res) => {
-    try {
-      if (req.body.nome) {
-        let results = await db.insertCitta(req.body.nome);
-        res.json(results);
-      }
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.insertCitta(req.body.nome), req, res)
 );
 
 router.get(
   '/clienti',
-  async (req, res) => {
-    try {
-      let results = await db.allClienti();
-      res.json(results);
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.allClienti(), req, res)
 );
 
 router.post(
   '/clienti',
   validator.validate(checkSchema(registrationSchema)),
-  async (req, res) => {
-    try {
-      if (req.body.nome) {
-        let results = await db.insertCliente(
-          req.body.nome,
-          req.body.cognome,
-          req.body.email,
-          req.body.dataNascita);
-        res.json(results);
-      }
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.insertCliente(
+        req.body.nome,
+        req.body.cognome,
+        req.body.email,
+        req.body.dataNascita),
+      req, res)
 );
 
 router.get(
   '/guide',
-  async (req, res) => {
-    try {
-      let results = await db.allGuide();
-      res.json(results);
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.allGuide(), req, res)
 );
 
 router.post(
   '/guide',
   validator.validate(checkSchema(registrationSchema)),
-  async (req, res) => {
-    try {
-      if (req.body.nome) {
-        let results = await db.insertGuida(
-          req.body.nome,
-          req.body.cognome,
-          req.body.email,
-          req.body.dataNascita);
-        res.json(results);
-      }
-    } catch(e) {
-      console.log(e);
-      res.sendStatus(500);
-    }
-  }
+  (req, res) => 
+    handleDbQuery(() => db.insertGuida(
+        req.body.nome,
+        req.body.cognome,
+        req.body.email,
+        req.body.dataNascita),
+      req, res)
 );
 
 module.exports = router;
