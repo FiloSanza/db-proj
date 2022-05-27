@@ -12,88 +12,61 @@ var pool = mysql.createPool({
 
 let agenziadb = {};
 
-agenziadb.allTags = () => {
-  return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM TAG', (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve(results);
-    })
-  })
-}
+const identity = (results) => results;
+const getLastInsertedId = (results) => { 
+  return {id: results.insertId} 
+};
 
-agenziadb.insertTag = (desc) => {
+const genericQuery = (query, resultMap, params = []) => {
   return new Promise((resolve, reject) => {
-    pool.query('INSERT INTO TAG (Descrizione) VALUES (?)', [desc], (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve({id: results.insertId});
+    pool.query(query, params, (err, results) => {
+      return err ? reject(err) : resolve(resultMap(results));
     })
   })
-}
+};
 
-agenziadb.allCitta = () => {
-  return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM CITTA', (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve(results);
-    })
-  })
-}
+agenziadb.allTags = () => genericQuery(
+  'SELECT * FROM TAG', 
+  identity
+);
 
-agenziadb.insertCitta = (desc) => {
-  return new Promise((resolve, reject) => {
-    pool.query('INSERT INTO CITTA (Nome) VALUES (?)', [desc], (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve({id: results.insertId});
-    })
-  })
-}
+agenziadb.insertTag = (desc) => genericQuery(
+  'INSERT INTO TAG (Descrizione) VALUES (?)',
+  getLastInsertedId,
+  [desc]
+);
 
-agenziadb.allClienti = () => {
-  return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM CLIENTE', (err, results) => {
-      return err
-      ? reject(err)
-      : resolve(results);
-    })
-  })
-}
+agenziadb.allCitta = () => genericQuery(
+  'SELECT * FROM CITTA', 
+  identity
+);
 
-agenziadb.insertCliente = (nome, cognome, email, data_nascita) => {
-  return new Promise((resolve, reject) => {
-    pool.query('INSERT INTO CLIENTE (Nome, Cognome, DataNascita, Email) VALUES (?, ?, ?, ?)', 
-    [nome, cognome, data_nascita, email], 
-    (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve({id: results.insertId});
-    })
-  })
-}
+agenziadb.insertCitta = (nome) => genericQuery(
+  'INSERT INTO CITTA (Nome) VALUES (?)',
+  getLastInsertedId,
+  [nome]
+);
 
-agenziadb.allGuide = () => {
-  return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM GUIDA', (err, results) => {
-      return err
-      ? reject(err)
-      : resolve(results);
-    })
-  })
-}
+agenziadb.allClienti = () => genericQuery(
+  'SELECT * FROM CLIENTE',
+  identity
+);
 
-agenziadb.insertGuida = (nome, cognome, email, data_nascita) => {
-  return new Promise((resolve, reject) => {
-    pool.query('INSERT INTO GUIDA (Nome, Cognome, DataNascita, Email) VALUES (?, ?, ?, ?)', 
-    [nome, cognome, data_nascita, email], 
-    (err, results) => {
-      return err 
-      ? reject(err)
-      : resolve({id: results.insertId});
-    })
-  })
-}
+agenziadb.insertCliente = (nome, cognome, email, data_nascita) => genericQuery(
+  'INSERT INTO CLIENTE (Nome, Cognome, Email, DataNascita) VALUES (?, ?, ?, ?)',
+  getLastInsertedId,
+  [nome, cognome, email, data_nascita]
+);
+
+agenziadb.allGuide = () => genericQuery(
+  'SELECT * FROM GUIDA',
+  identity
+);
+
+agenziadb.insertGuida = (nome, cognome, email, data_nascita) => genericQuery(
+  'INSERT INTO GUIDA (Nome, Cognome, Email, DataNascita)',
+  getLastInsertedId,
+  [nome, cognome, email, data_nascita]
+);
   
 module.exports = agenziadb;
