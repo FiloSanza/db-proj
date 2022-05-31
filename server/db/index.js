@@ -1,13 +1,11 @@
 const mysql = require('mysql');
-const creds = require('../creds')
+const config = require('../config')
 
 var pool = mysql.createPool({
   connectionLimit: 10,
-  password: creds.password,
-  user: creds.user,
   database: 'agenzia',
   host: 'localhost',
-  port: 3306
+  ...config
 });
 
 let agenziadb = {};
