@@ -31,7 +31,7 @@ router.post(
       .withMessage("La descrizione deve essere di almeno 3 caratteri.")
   ]),
   (req, res) => 
-    handleDbQuery(() => db.allTags(req.body.descrizione), req, res)
+    handleDbQuery(() => db.insertTag(req.body.descrizione), req, res)
 );
 
 router.get(
