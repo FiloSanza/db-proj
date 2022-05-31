@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require('../db')
-const { body, checkSchema } = require('express-validator');
+const { body, checkSchema, query } = require('express-validator');
 const { validator, registrationSchema } = require('../middleware/validation');
 
 const router = express.Router();
@@ -86,5 +86,18 @@ router.post(
         req.body.dataNascita),
       req, res)
 );
+
+router.get(
+  '/tagviaggio',
+  validator.validate([
+    query("idViaggio")
+      .exists()
+      .withMessage("Id viaggio mancante.")
+      .isNumeric()
+      .withMessage("Id viaggio non valido")
+  ]),
+  (req, res) => 
+    handleDbQuery(() => db.tagViaggio(req.query.idViaggio))
+)
 
 module.exports = router;

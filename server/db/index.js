@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const creds = require('../creds')
+const queryStr = require('./query-strings')
 
 var pool = mysql.createPool({
   connectionLimit: 10,
@@ -26,47 +27,53 @@ const genericQuery = (query, resultMap, params = []) => {
 };
 
 agenziadb.allTags = () => genericQuery(
-  'SELECT * FROM TAG', 
+  queryStr.selectAllTag,
   identity
 );
 
 agenziadb.insertTag = (desc) => genericQuery(
-  'INSERT INTO TAG (Descrizione) VALUES (?)',
+  queryStr.insertTag,
   getLastInsertedId,
   [desc]
 );
 
 agenziadb.allCitta = () => genericQuery(
-  'SELECT * FROM CITTA', 
+  queryStr.selectAllCitta, 
   identity
 );
 
 agenziadb.insertCitta = (nome) => genericQuery(
-  'INSERT INTO CITTA (Nome) VALUES (?)',
+  queryStr.insertCitta,
   getLastInsertedId,
   [nome]
 );
 
 agenziadb.allClienti = () => genericQuery(
-  'SELECT * FROM CLIENTE',
+  queryStr.selectAllClienti,
   identity
 );
 
 agenziadb.insertCliente = (nome, cognome, email, data_nascita) => genericQuery(
-  'INSERT INTO CLIENTE (Nome, Cognome, Email, DataNascita) VALUES (?, ?, ?, ?)',
+  queryStr.insertCliente,
   getLastInsertedId,
   [nome, cognome, email, data_nascita]
 );
 
 agenziadb.allGuide = () => genericQuery(
-  'SELECT * FROM GUIDA',
+  queryStr.selectAllGuide,
   identity
 );
 
 agenziadb.insertGuida = (nome, cognome, email, data_nascita) => genericQuery(
-  'INSERT INTO GUIDA (Nome, Cognome, Email, DataNascita)',
+  queryStr.insertGuide,
   getLastInsertedId,
   [nome, cognome, email, data_nascita]
 );
   
+agenziadb.tagViaggio = (idViaggio) => genericQuery(
+  queryStr.selectTagViaggio,
+  identity,
+  [idViaggio]
+);
+
 module.exports = agenziadb;
