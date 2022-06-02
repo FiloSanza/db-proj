@@ -1,7 +1,12 @@
 const express = require("express");
 const db = require('../db')
 const { body, checkSchema, query } = require('express-validator');
-const { validator, registrationSchema } = require('../middleware/validation');
+const { 
+  validator, 
+  registrationSchema, 
+  insertAttivitaSchema,
+  insertViaggioSchema
+} = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -31,7 +36,7 @@ router.post(
       .withMessage("La descrizione deve essere di almeno 3 caratteri.")
   ]),
   (req, res) => 
-    handleDbQuery(() => db.allTags(req.body.descrizione), req, res)
+    handleDbQuery(() => db.insertTag(req.body.descrizione), req, res)
 );
 
 router.get(
@@ -97,7 +102,28 @@ router.get(
       .withMessage("Id viaggio non valido")
   ]),
   (req, res) => 
-    handleDbQuery(() => db.tagViaggio(req.query.idViaggio))
+    handleDbQuery(() => db.tagViaggio(req.query.idViaggio), req, res)
 )
+
+router.post(
+  '/attivita',
+  validator.validate(checkSchema(insertAttivitaSchema)),
+  (req, res) => handleDbQuery(() => db.insertAttivita(
+    req.body.descrizione,
+    req.body.durata,
+    req.body.idCitta,
+    req.body.idTags
+  ), req, res)
+);
+
+router.post(
+  '/viaggio',
+  validator.validate(checkSchema(insertViaggioSchema)),
+  (req, res) => handleDbQuery(() => db.insertViaggio(
+    req.body.viaggio,
+    req.body.giornate,
+    req.body.visite
+  ), req, res)
+);
 
 module.exports = router;
