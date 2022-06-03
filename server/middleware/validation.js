@@ -58,9 +58,7 @@ let insertAttivitaSchema = {
 }
 
 let insertViaggioSchema = {
-  viaggio: {
-    required: true
-  },
+  viaggio: { },
   giornate: {
     isArray: true
   },
