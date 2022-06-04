@@ -12,6 +12,9 @@ export const viaggioRules = {
       .exists()
       .isString()
       .isLength({min: 3}),
+    body("upgradeViaggioIds")
+      .exists()
+      .isArray(),
     body("periodo")
       .exists(),
     body("periodo.giornoInizio")
@@ -39,5 +42,7 @@ export const viaggioRules = {
       .isNumeric(),
     body("visite.*.numeroGiornata")
       .isNumeric(),
+    body("visite.*.updates")
+      .isArray()
   ]
 }

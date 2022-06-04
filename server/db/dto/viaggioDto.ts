@@ -2,7 +2,8 @@ export interface ViaggioCreateModel {
   descrizione: string,
   periodo: PeriodoViaggio,
   giornate: GiornataViaggio[],
-  visite: VisitaViaggio[]
+  visite: VisitaViaggio[],
+  upgradeViaggioIds: number[],
 }
 
 export interface GiornataViaggio {
@@ -13,7 +14,8 @@ export interface GiornataViaggio {
 export interface VisitaViaggio {
   idAttivita: number,
   ora: number,
-  numeroGiornata: number
+  numeroGiornata: number,
+  updates: number[]
 }
 
 export interface PeriodoViaggio {

@@ -1,12 +1,15 @@
 import { ViaggioCreateModel } from "../dto/viaggioDto";
+import { AggiuntaService } from "./aggiunta";
 import { PeriodoViaggioService } from "./periodo";
 import { prismaClient } from "./utils";
 
 export class ViaggioService {
   private readonly _prisma = prismaClient;
-  private readonly _periodoService = new PeriodoViaggioService();
+  private readonly _aggiunte = new AggiuntaService();
   
   create(data: ViaggioCreateModel) {
+    console.log(data);
+    
     return this._prisma.$transaction(async (prisma) => {
       //Creo il viaggio
       let viaggio = await prisma.viaggio.create({
@@ -29,9 +32,29 @@ export class ViaggioService {
                 MeseFine: data.periodo.meseFine
               }
             }
-          },
+          }
         }
       });
+
+      //Aggiungo le aggiunte viaggio
+      let valid = await data.upgradeViaggioIds.every(async upd => {
+        let aggiunta = await this._aggiunte.getAll({IdAggiunta: upd});
+        return aggiunta.length != 0 ? !aggiunta[0].AggiuntaVisita : false;
+      })
+
+      if (!valid) {
+        throw new Error("Invalid update_viaggio ids");
+      }
+
+      for (let i=0; i<data.upgradeViaggioIds.length; i++) {
+        let id = data.upgradeViaggioIds[i];
+        await prisma.upgradeViaggio.create({
+          data: {
+            IdAggiunta: id,
+            IdViaggio: viaggio.IdViaggio
+          }
+        })
+      }
 
       //Creo le giornate
       let dataGiornate = data.giornate.map(giornata => ({
@@ -44,9 +67,10 @@ export class ViaggioService {
         data: dataGiornate
       });
 
+      //Creo le visite
       for (let i=0; i<data.visite.length; i++) {
         let visita = data.visite[i];
-        await prisma.visita.create({
+        let insertedVisita = await prisma.visita.create({
           data: {
             Ora: Number(visita.ora),
             Attivita: {
@@ -61,7 +85,35 @@ export class ViaggioService {
               }
             }
           }
+        });
+
+        //Aggiunte visite
+        let valid = await visita.updates.every(async upd => {
+          let aggiunta = await this._aggiunte.getAll({IdAggiunta: upd});
+          return aggiunta.length != 0 ? aggiunta[0].AggiuntaVisita : false;
         })
+  
+        if (!valid) {
+          throw new Error("Invalid update_viaggio ids");
+        }
+
+        for (let j=0; j<visita.updates.length; j++) {
+          let id = visita.updates[j];
+          await prisma.upgradeVisita.create({
+            data: {
+              Aggiunta: {
+                connect: {
+                  IdAggiunta: id
+                }
+              },
+              Visita: {
+                connect: {
+                  IdVisita: insertedVisita.IdVisita
+                }
+              }
+            }
+          });
+        }
       }
 
       return viaggio;
@@ -76,9 +128,19 @@ export class ViaggioService {
           include: {
             Visite: {
               include: {
-                Attivita: true
+                Attivita: true,
+                Upgrade: {
+                  include: {
+                    Aggiunta: true
+                  }
+                }
               }
             }
+          }
+        },
+        Upgrade: {
+          include: {
+            Aggiunta: true
           }
         },
         Periodo: true
@@ -94,6 +156,10 @@ export class ViaggioService {
           meseInizio: result.Periodo.MeseInizio,
           meseFine: result.Periodo.MeseFine
         },
+        aggiunte: result.Upgrade.map(upg => ({ 
+          descrizione: upg.Aggiunta.Descrizione, 
+          prezzo: upg.Aggiunta.Prezzo 
+        })),
         giornate: result.Giornate.map(giornata => ({
           numero: giornata.Numero,
           descrizione: giornata.Descrizione,
@@ -101,7 +167,11 @@ export class ViaggioService {
             idVisita: visita.IdVisita,
             ora: visita.Ora,
             descrizioneAttivita: visita.Attivita.Descrizione,
-            durata: visita.Attivita.Durata
+            durata: visita.Attivita.Durata,
+            aggiunte: visita.Upgrade.map(upg => ({ 
+              descrizione: upg.Aggiunta.Descrizione,
+              prezzo: upg.Aggiunta.Prezzo
+            }))
           }))
         }))
       }));
