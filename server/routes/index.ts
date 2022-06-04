@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { routerAggiunta } from "./aggiunta";
 import { routerAttivita } from "./attivita";
 import { routerCitta } from "./citta";
 import { routerCliente } from "./cliente";
@@ -9,6 +10,7 @@ import { routerViaggio } from "./viaggio";
 export const router = Router();
 
 router.use('/attivita', routerAttivita);
+router.use('/aggiunta', routerAggiunta);
 router.use('/viaggio', routerViaggio);
 router.use('/cliente', routerCliente);
 router.use('/guida', routerGuida);
