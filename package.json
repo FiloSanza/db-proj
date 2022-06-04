@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon server/server.js -w server"
+    "dev": "npx nodemon server/server.ts -w server"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,15 @@
   },
   "homepage": "https://github.com/FiloSanza/db-proj#readme",
   "dependencies": {
+    "@prisma/client": "^3.14.0",
     "express": "^4.18.1",
     "express-validator": "^6.14.1",
-    "mysql": "^2.18.1"
+    "prisma": "^3.14.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.1",
     "nodemon": "^2.0.16"
   }
 }
