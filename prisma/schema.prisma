@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Aggiunta {
+  IdAggiunta            Int                     @id @default(autoincrement())
+  Descrizione           String                  @db.VarChar(500)
+  Prezzo                Decimal                 @db.Decimal(10, 2)
+  AggiuntaVisita        Boolean                 @default(dbgenerated("(true)"))
+  AggiuntePrenotazioni  AggiuntaPrenotazione[]
+  UpgradeViaggi         UpgradeViaggio[]
+  UpgradeVisite         UpgradeVisita[]
+  @@map("AGGIUNTA")
+}
+
+model AggiuntaPrenotazione {
+  IdAggiunta     Int
+  IdPrenotazione Int
+  Aggiunta       Aggiunta     @relation(fields: [IdAggiunta], references: [IdAggiunta], onDelete: NoAction, onUpdate: NoAction, map: "FKagg_AGG")
+  Prenotazione   Prenotazione @relation(fields: [IdPrenotazione], references: [IdPrenotazione], onDelete: NoAction, onUpdate: NoAction, map: "FKagg_PRE")
+
+  @@id([IdPrenotazione, IdAggiunta])
+  @@index([IdAggiunta], map: "FKagg_AGG")
+  @@map("AGGIUNTA_PRENOTAZIONE")
+}
+
+model Attivita {
+  IdAttivita  Int           @id @default(autoincrement())
+  Descrizione String        @db.VarChar(500)
+  Durata      Int
+  IdCitta     Int
+  Citta       Citta         @relation(fields: [IdCitta], references: [IdCitta], onDelete: NoAction, onUpdate: NoAction, map: "FKlocazione")
+  Descrittori Descrittore[]
+  Visite      Visita?
+
+  @@index([IdCitta], map: "FKlocazione")
+  @@map("ATTIVITA")
+}
+
+model Citta {
+  IdCitta  Int        @id @default(autoincrement())
+  Nome     String     @unique(map: "IDCITTA_1") @db.VarChar(500)
+  Attivita Attivita[]
+  @@map("CITTA")
+}
+
+model Cliente {
+  IdCliente    Int            @id @default(autoincrement())
+  Nome         String         @db.VarChar(100)
+  Cognome      String         @db.VarChar(100)
+  DataNascita  DateTime       @db.Date
+  Email        String         @unique(map: "EMAIL_CLIENTE") @db.VarChar(50)
+  Prenotazioni Prenotazione[]
+  @@map("CLIENTE")
+}
+
+model DataViaggio {
+  IdDataViaggio Int            @id @default(autoincrement())
+  DataPartenza  DateTime       @db.Date
+  PrezzoBase    Decimal        @db.Decimal(10, 2)
+  IdViaggio     Int
+  Posti         Int
+  IdGuida       Int
+  IdSconto      Int?
+  Guida         Guida          @relation(fields: [IdGuida], references: [IdGuida], onDelete: NoAction, onUpdate: NoAction, map: "FKaccompagnatore")
+  Sconto        Sconto?        @relation(fields: [IdSconto], references: [IdSconto], onDelete: NoAction, onUpdate: NoAction, map: "FKsconto_applicato")
+  Viaggio       Viaggio        @relation(fields: [IdViaggio], references: [IdViaggio], onDelete: NoAction, onUpdate: NoAction, map: "FKpartenza")
+  Prenotazioni  Prenotazione[]
+
+  @@unique([IdViaggio, DataPartenza], map: "IDDATA_VIAGGIO_1")
+  @@index([IdGuida], map: "FKaccompagnatore")
+  @@index([IdSconto], map: "FKsconto_applicato")
+  @@map("DATA_VIAGGIO")
+}
+
+model Descrittore {
+  IdAttivita Int
+  IdTag      Int
+  Attivita   Attivita @relation(fields: [IdAttivita], references: [IdAttivita], onDelete: NoAction, onUpdate: NoAction, map: "FKdes_ATT")
+  Tag        Tag      @relation(fields: [IdTag], references: [IdTag], onDelete: NoAction, onUpdate: NoAction, map: "FKdes_TAG")
+
+  @@id([IdAttivita, IdTag])
+  @@index([IdTag], map: "FKdes_TAG")
+  @@map("DESCRITTORE")
+}
+
+model Giornata {
+  IdGiornata  Int      @id @default(autoincrement())
+  Numero      Int
+  IdViaggio   Int
+  Descrizione String   @db.VarChar(500)
+  Viaggio     Viaggio  @relation(fields: [IdViaggio], references: [IdViaggio], onDelete: NoAction, onUpdate: NoAction, map: "FKstruttura")
+  Visite      Visita[]
+
+  @@unique([IdViaggio, Numero], map: "IDGIORNATA_1")
+  @@map("GIORNATA")
+}
+
+model Guida {
+  IdGuida      Int            @id @default(autoincrement())
+  Nome         String         @db.VarChar(100)
+  Cognome      String         @db.VarChar(100)
+  DataNascita  DateTime       @db.Date
+  Email        String         @unique(map: "EMAIL_GUIDA") @db.VarChar(50)
+  Viaggi       DataViaggio[]
+  @@map("GUIDA")
+}
+
+model Periodo {
+  IdPeriodo    Int       @id @default(autoincrement())
+  GiornoInizio Int
+  MeseInizio   Int
+  GiornoFine   Int
+  MeseFine     Int
+  Viaggi       Viaggio[]
+
+  @@unique([GiornoInizio, MeseInizio, GiornoFine, MeseFine], map: "UNIQUE_PERIODO")
+  @@map("PERIODO")
+}
+
+model Prenotazione {
+  IdPrenotazione        Int                     @id @default(autoincrement())
+  IdCliente             Int
+  IdDataViaggio         Int
+  DataAcquisto          DateTime                @db.Date
+  PrezzoTotale          Decimal                 @db.Decimal(10, 2)
+  Cliente               Cliente                 @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "FKprenotazione_cliente")
+  DataViaggio           DataViaggio            @relation(fields: [IdDataViaggio], references: [IdDataViaggio], onDelete: NoAction, onUpdate: NoAction, map: "FKdata")
+  Aggiunte              AggiuntaPrenotazione[]
+  Recensione            Recensione?
+
+  @@unique([IdDataViaggio, IdCliente], map: "IDPRENOTAZIONE_1")
+  @@index([IdCliente], map: "FKprenotazione_cliente")
+  @@map("PRENOTAZIONE")
+}
+
+model Recensione {
+  IdRecensione      Int          @id @default(autoincrement())
+  IdPrenotazione    Int          @unique(map: "FKdescrive_ID")
+  Valutazione       Int
+  Descrizione       String?      @db.VarChar(500)
+  DataPubblicazione DateTime     @default(now()) @db.DateTime(0)
+  Prenotazione      Prenotazione @relation(fields: [IdPrenotazione], references: [IdPrenotazione], onDelete: NoAction, onUpdate: NoAction, map: "FKdescrive_FK")
+  @@map("RECENSIONE")
+}
+
+model Sconto {
+  IdSconto     Int            @id @default(autoincrement())
+  Percentuale  Float          @unique(map: "IDSCONTO_1") @db.Float
+  DATA_VIAGGIO DataViaggio[]
+  @@map("SCONTO")
+}
+
+model Tag {
+  IdTag       Int           @id @default(autoincrement())
+  Descrizione String        @db.VarChar(500)
+  Descrittori Descrittore[]
+  @@map("TAG")
+}
+
+model UpgradeViaggio {
+  IdAggiunta Int
+  IdViaggio  Int
+  Aggiunta   Aggiunta @relation(fields: [IdAggiunta], references: [IdAggiunta], onDelete: NoAction, onUpdate: NoAction, map: "FKupg_AGG_VIAGGIO")
+  Viaggio    Viaggio  @relation(fields: [IdViaggio], references: [IdViaggio], onDelete: NoAction, onUpdate: NoAction, map: "FKupg_VIA")
+
+  @@id([IdAggiunta, IdViaggio])
+  @@index([IdViaggio], map: "FKupg_VIA")
+  @@map("UPGRADE_VIAGGIO")
+}
+
+model UpgradeVisita {
+  IdAggiunta Int
+  IdVisita   Int
+  Aggiunta   Aggiunta @relation(fields: [IdAggiunta], references: [IdAggiunta], onDelete: NoAction, onUpdate: NoAction, map: "FKupg_AGG_VISITA")
+  Visita     Visita   @relation(fields: [IdVisita], references: [IdVisita], onDelete: NoAction, onUpdate: NoAction, map: "FKupg_VIS")
+
+  @@id([IdAggiunta, IdVisita])
+  @@index([IdVisita], map: "FKupg_VIS")
+  @@map("UPGRADE_VISITA")
+}
+
+model Viaggio {
+  IdViaggio       Int               @id @default(autoincrement())
+  Descrizione     String            @db.VarChar(500)
+  IdPeriodo       Int
+  Periodo         Periodo           @relation(fields: [IdPeriodo], references: [IdPeriodo], onDelete: NoAction, onUpdate: NoAction, map: "FK_ViaggioPeriodoID")
+  Date            DataViaggio[]
+  Giornate        Giornata[]
+  Upgrade         UpgradeViaggio[]
+
+  @@index([IdPeriodo], map: "FK_ViaggioPeriodoID")
+  @@map("VIAGGIO")
+}
+
+model Visita {
+  IdVisita       Int              @id @default(autoincrement())
+  IdAttivita     Int              @unique(map: "FKsvolgimento_ID")
+  Ora            Int
+  IdGiornata     Int
+  Attivita       Attivita         @relation(fields: [IdAttivita], references: [IdAttivita], onDelete: NoAction, onUpdate: NoAction, map: "FKsvolgimento_FK")
+  Giornata       Giornata         @relation(fields: [IdGiornata], references: [IdGiornata], onDelete: NoAction, onUpdate: NoAction, map: "FKR")
+  Upgrade        UpgradeVisita[]
+
+  @@index([IdGiornata], map: "FKR")
+  @@map("VISITA")
+}
