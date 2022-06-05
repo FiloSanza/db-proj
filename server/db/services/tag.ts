@@ -1,9 +1,7 @@
 import { TagCreateModel } from "../dto/tagDto";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class TagService {
-  private readonly _prisma = prismaClient;
-
+export class TagService extends BaseService {
   create(data: TagCreateModel) {
     return this._prisma.tag.create({
       data: {

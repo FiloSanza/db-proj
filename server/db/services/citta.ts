@@ -1,9 +1,7 @@
 import { CittaCreateModel } from "../dto/cittaDto";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class CittaService {
-  private readonly _prisma = prismaClient;
-
+export class CittaService extends BaseService {
   create(data: CittaCreateModel) {
     return this._prisma.citta.create({
       data: {

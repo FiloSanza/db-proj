@@ -5,11 +5,13 @@ import { routerCitta } from "./citta";
 import { routerCliente } from "./cliente";
 import { routerDataViaggio } from "./dataviaggio";
 import { routerGuida } from "./guida";
+import { routerPrenotazione } from "./prenotazione";
 import { routerTag } from "./tag";
 import { routerViaggio } from "./viaggio";
 
 export const router = Router();
 
+router.use('/prenotazione', routerPrenotazione);
 router.use('/dataviaggio', routerDataViaggio);
 router.use('/attivita', routerAttivita);
 router.use('/aggiunta', routerAggiunta);

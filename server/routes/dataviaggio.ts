@@ -23,9 +23,6 @@ routerDataViaggio.get(
   '/',
   (req, res, next) => {
     let filter = req.query as Record<string, any>;
-    if ('IdCliente' in filter) {
-      filter.IdCliente = Number(filter.IdCliente);
-    }
     service.getAll(filter)
       .then(results => res.send(results))
       .catch(err => next(err));

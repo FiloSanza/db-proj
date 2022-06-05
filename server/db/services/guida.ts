@@ -1,9 +1,7 @@
 import { GuidaRegistrationModel } from "../dto/guidaDto";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class GuidaService {
-  private readonly _prisma = prismaClient;
-
+export class GuidaService extends BaseService {
   register(data: GuidaRegistrationModel) {
     return this._prisma.guida.create({
       data: {

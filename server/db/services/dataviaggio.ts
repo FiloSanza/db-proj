@@ -1,9 +1,7 @@
 import { DataViaggioCreateModel } from "../dto/dataviaggio";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class DataViaggioService {
-  private readonly _prisma = prismaClient;
-  
+export class DataViaggioService extends BaseService {
   create(data: DataViaggioCreateModel) {
     return this._prisma.dataViaggio.create({
       data: {
@@ -49,5 +47,42 @@ export class DataViaggioService {
         prezzoBase: result.PrezzoBase
       }));
     });
+  }
+
+  async countPostiRimasti(idDataViaggio: number) {
+    let prenotazioni = await this._prisma.dataViaggio.findMany({
+      where: {
+        IdDataViaggio: idDataViaggio,
+      },
+      select: {
+        _count: {
+          select: {
+            Prenotazioni: true
+          }
+        }
+      }  
+    })
+    .then(results => results[0]._count.Prenotazioni);
+    return this._prisma.dataViaggio.findUnique({
+      where: {
+        IdDataViaggio: idDataViaggio
+      },
+      select: {
+        Posti: true
+      }
+    }).then(result => result.Posti - prenotazioni);
+  }
+
+  getPrezzo(idDataViaggio: number) {
+    return this._prisma.dataViaggio.findUnique({
+      where: {
+        IdDataViaggio: idDataViaggio
+      },
+      select: {
+        PrezzoBase: true,
+        Sconto: true
+      }
+    }).then(result => 
+      result.PrezzoBase.toNumber() * (1 - ((result?.Sconto.Percentuale) ?? 0) / 100));
   }
 }

@@ -1,9 +1,7 @@
 import { AggiuntaCreateModel } from "../dto/aggiunta";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class AggiuntaService {
-  private readonly _prisma = prismaClient;
-  
+export class AggiuntaService extends BaseService {
   create(data: AggiuntaCreateModel) {
     return this._prisma.aggiunta.create({
       data: {
@@ -18,5 +16,17 @@ export class AggiuntaService {
     return this._prisma.aggiunta.findMany({
       where: filter
     });
+  }
+
+  getPrezzoAggiunta(idAggiunta: number) {
+    return this._prisma.aggiunta.findUnique({
+      where: {
+        IdAggiunta: idAggiunta
+      },
+      select: {
+        Prezzo: true
+      }
+    })
+    .then(result => result.Prezzo.toNumber() );
   }
 }

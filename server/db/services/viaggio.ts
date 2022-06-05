@@ -1,12 +1,10 @@
 import { ViaggioCreateModel } from "../dto/viaggioDto";
 import { AggiuntaService } from "./aggiunta";
-import { PeriodoViaggioService } from "./periodo";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class ViaggioService {
-  private readonly _prisma = prismaClient;
+export class ViaggioService extends BaseService {
   private readonly _aggiunte = new AggiuntaService();
-  
+
   create(data: ViaggioCreateModel) {
     console.log(data);
     
@@ -176,5 +174,47 @@ export class ViaggioService {
         }))
       }));
     })
+  }
+
+  getAllUpgrades(id: number): Promise<Record<string, number>> {
+    return this._prisma.viaggio.findUnique({
+      where: {
+        IdViaggio: id
+      },
+      include: {
+        Giornate: {
+          include: {
+            Visite: {
+              include: {
+                Upgrade: {
+                  select: {
+                    Aggiunta: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        Upgrade: {
+          select: {
+            Aggiunta: true
+          }
+        },
+      }
+    })
+    //Take only IdAggiunta
+    .then(result => {
+      return result.Upgrade.map(u => u.Aggiunta.IdAggiunta)
+          .concat(
+            result.Giornate.flatMap(
+              g => g.Visite.flatMap(
+                v => v.Upgrade.flatMap(
+                  u => u.Aggiunta.IdAggiunta))));
+    })
+    //Count occurrences
+    .then(result => result.reduce(function (acc, curr) {
+        return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc;
+      }, {})
+    );
   }
 }

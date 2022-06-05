@@ -1,9 +1,7 @@
-import { prismaClient } from "./utils";
 import { AttivitaCreateModel, AttivitaDto } from "../dto/attivitaDto";
+import { BaseService } from "./base";
 
-export class AttivitaService {
-  private readonly _prisma = prismaClient;
-
+export class AttivitaService extends BaseService {
   create(data: AttivitaCreateModel) {
     return this._prisma.$transaction(async prisma => {
       //Creo l'attivita

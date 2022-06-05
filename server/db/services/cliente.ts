@@ -1,9 +1,7 @@
 import { ClienteRegistrationModel } from "../dto/clienteDto";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class ClienteService {
-  private readonly _prisma = prismaClient;
-
+export class ClienteService extends BaseService {
   register(data: ClienteRegistrationModel) {
     return this._prisma.cliente.create({
       data: {

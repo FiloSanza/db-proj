@@ -1,9 +1,7 @@
 import { PeriodoViaggio } from "../dto/viaggioDto";
-import { prismaClient } from "./utils";
+import { BaseService } from "./base";
 
-export class PeriodoViaggioService {
-  private readonly _prisma = prismaClient;
-  
+export class PeriodoViaggioService extends BaseService {  
   getAll(filter: PeriodoViaggio) {
     return this._prisma.periodo.findMany({
       where: {
