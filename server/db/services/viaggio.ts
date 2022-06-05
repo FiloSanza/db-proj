@@ -1,14 +1,14 @@
+import { PrismaClient } from "@prisma/client";
+import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiuntaDto";
 import { ViaggioCreateModel } from "../dto/viaggioDto";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
 
 export class ViaggioService extends BaseService {
-  private readonly _aggiunte = new AggiuntaService();
-
   create(data: ViaggioCreateModel) {
-    console.log(data);
-    
     return this._prisma.$transaction(async (prisma) => {
+      let aggiunte = new AggiuntaService(prisma as PrismaClient);
+
       //Creo il viaggio
       let viaggio = await prisma.viaggio.create({
         data: {
@@ -36,7 +36,7 @@ export class ViaggioService extends BaseService {
 
       //Aggiungo le aggiunte viaggio
       let valid = await data.upgradeViaggioIds.every(async upd => {
-        let aggiunta = await this._aggiunte.getAll({IdAggiunta: upd});
+        let aggiunta = await aggiunte.getAll(new AggiuntaFilterModel({IdAggiunta: upd}));
         return aggiunta.length != 0 ? !aggiunta[0].AggiuntaVisita : false;
       })
 
@@ -87,7 +87,7 @@ export class ViaggioService extends BaseService {
 
         //Aggiunte visite
         let valid = await visita.updates.every(async upd => {
-          let aggiunta = await this._aggiunte.getAll({IdAggiunta: upd});
+          let aggiunta = await aggiunte.getAll(new AggiuntaFilterModel({IdAggiunta: upd}));
           return aggiunta.length != 0 ? aggiunta[0].AggiuntaVisita : false;
         })
   

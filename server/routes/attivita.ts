@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AttivitaCreateModel } from "../db/dto/attivitaDto";
+import { AttivitaCreateModel, AttivitaFilterModel } from "../db/dto/attivitaDto";
 import { AttivitaService } from "../db/services/attivita";
 import { attivitaRules } from "../validation/attivita";
 import { validator } from "../validation/utils";
@@ -12,7 +12,7 @@ routerAttivita.post(
   '/create', 
   validator(attivitaRules.forCreate), 
   (req, res, next) => {
-    let dto = req.body as AttivitaCreateModel;
+    let dto = AttivitaCreateModel.fromDict(req.body);
     service.create(dto)
       .then(results => res.send(results))
       .catch(err => next(err));
@@ -22,8 +22,7 @@ routerAttivita.post(
 routerAttivita.get(
   '/',
   (req, res, next) => {
-    let filter = req.query as Record<string, any>;
-    service.getAll(filter)
+    service.getAll(new AttivitaFilterModel(req.query))
       .then(results => res.send(results))
       .catch(err => next(err));
   }

@@ -1,21 +1,21 @@
-import { GuidaRegistrationModel } from "../dto/guidaDto";
+import { GuidaCreateModel, GuidaFilterModel } from "../dto/guidaDto";
 import { BaseService } from "./base";
 
 export class GuidaService extends BaseService {
-  register(data: GuidaRegistrationModel) {
+  register(data: GuidaCreateModel) {
     return this._prisma.guida.create({
       data: {
         Nome: data.nome,
         Cognome: data.cognome,
         Email: data.email,
-        DataNascita: new Date(data.dataNascita)
+        DataNascita: data.dataNascita
       }
     });
   }
 
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: GuidaFilterModel) {
     return this._prisma.guida.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 }

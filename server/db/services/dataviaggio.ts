@@ -1,11 +1,11 @@
-import { DataViaggioCreateModel } from "../dto/dataviaggio";
+import { DataViaggioCreateModel, DataViaggioFilterModel } from "../dto/dataviaggio";
 import { BaseService } from "./base";
 
 export class DataViaggioService extends BaseService {
   create(data: DataViaggioCreateModel) {
     return this._prisma.dataViaggio.create({
       data: {
-        DataPartenza: new Date(data.dataPartenza),
+        DataPartenza: data.dataPartenza,
         Posti: data.posti,
         PrezzoBase: data.prezzoBase,
         Sconto: {
@@ -28,9 +28,9 @@ export class DataViaggioService extends BaseService {
     });
   }
   
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: DataViaggioFilterModel) {
     return this._prisma.dataViaggio.findMany({
-      where: filter,
+      where: filter.getFilterDict(),
       include: {
         Viaggio: true,
         Sconto: true,

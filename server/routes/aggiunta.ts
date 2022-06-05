@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AggiuntaCreateModel } from "../db/dto/aggiunta";
+import { AggiuntaCreateModel, AggiuntaFilterModel } from "../db/dto/aggiuntaDto";
 import { AggiuntaService } from "../db/services/aggiunta";
 import { aggiuntaRules } from "../validation/aggiunta";
 import { validator } from "../validation/utils";
@@ -12,7 +12,7 @@ routerAggiunta.post(
   '/create', 
   validator(aggiuntaRules.forCreate), 
   (req, res, next) => {
-    let dto = req.body as AggiuntaCreateModel;
+    let dto = AggiuntaCreateModel.fromDict(req.body);
     service.create(dto)
       .then(results => res.send(results))
       .catch(err => next(err));
@@ -22,8 +22,7 @@ routerAggiunta.post(
 routerAggiunta.get(
   '/',
   (req, res, next) => {
-    let filter = req.query as Record<string, any>;
-    service.getAll(filter)
+    service.getAll(new AggiuntaFilterModel(req.query))
       .then(results => res.send(results))
       .catch(err => next(err));
   }

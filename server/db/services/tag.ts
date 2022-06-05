@@ -1,4 +1,4 @@
-import { TagCreateModel } from "../dto/tagDto";
+import { TagCreateModel, TagFilterModel } from "../dto/tagDto";
 import { BaseService } from "./base";
 
 export class TagService extends BaseService {
@@ -10,9 +10,9 @@ export class TagService extends BaseService {
     });
   }
 
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: TagFilterModel) {
     return this._prisma.tag.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 }

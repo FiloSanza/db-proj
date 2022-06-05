@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PrenotazioneCreateModel } from "../db/dto/prenotazione";
+import { PrenotazioneCreateModel, PrenotazioneFilterModel } from "../db/dto/prenotazione";
 import { PrenotazioneService } from "../db/services/prenotazione";
 import { validator } from "../validation/utils";
 import { errorHandler } from "./utils";
@@ -11,8 +11,7 @@ routerPrenotazione.post(
   '/create', 
   //TODO: VALIDATE
   (req, res, next) => {
-    let dto = req.body as PrenotazioneCreateModel;
-    service.create(dto)
+    service.create(PrenotazioneCreateModel.fromDict(req.body))
     .then(results => res.send(results))
     .catch(err => next(err));
 })
@@ -20,8 +19,7 @@ routerPrenotazione.post(
 routerPrenotazione.get(
   '/',
   (req, res, next) => {
-    let filter = req.query as Record<string, any>;
-    service.getAll(filter)
+    service.getAll(new PrenotazioneFilterModel(req.query))
     .then(results => res.send(results))
     .catch(err => next(err));
 })

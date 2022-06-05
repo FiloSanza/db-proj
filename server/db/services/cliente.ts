@@ -1,21 +1,21 @@
-import { ClienteRegistrationModel } from "../dto/clienteDto";
+import { ClienteFilterModel, ClienteCreateModel } from "../dto/clienteDto";
 import { BaseService } from "./base";
 
 export class ClienteService extends BaseService {
-  register(data: ClienteRegistrationModel) {
+  register(data: ClienteCreateModel) {
     return this._prisma.cliente.create({
       data: {
         Nome: data.nome,
         Cognome: data.cognome,
         Email: data.email,
-        DataNascita: new Date(data.dataNascita)
+        DataNascita: data.dataNascita
       }
     });
   }
 
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: ClienteFilterModel) {
     return this._prisma.cliente.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 }

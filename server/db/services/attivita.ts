@@ -1,4 +1,4 @@
-import { AttivitaCreateModel, AttivitaDto } from "../dto/attivitaDto";
+import { AttivitaCreateModel, AttivitaDto, AttivitaFilterModel } from "../dto/attivitaDto";
 import { BaseService } from "./base";
 
 export class AttivitaService extends BaseService {
@@ -31,9 +31,9 @@ export class AttivitaService extends BaseService {
     });
   }
   
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: AttivitaFilterModel) {
     return (this._prisma.attivita.findMany({
-      where: filter,
+      where: filter.getFilterDict(),
       include: {
         Citta: true,
         Descrittori: {

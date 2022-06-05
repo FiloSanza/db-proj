@@ -1,8 +1,8 @@
-import { AggiuntaCreateModel } from "../dto/aggiunta";
+import { AggiuntaFilterModel, IAggiuntaCreateModel } from "../dto/aggiuntaDto";
 import { BaseService } from "./base";
 
 export class AggiuntaService extends BaseService {
-  create(data: AggiuntaCreateModel) {
+  create(data: IAggiuntaCreateModel) {
     return this._prisma.aggiunta.create({
       data: {
         Descrizione: data.descrizione,
@@ -11,10 +11,10 @@ export class AggiuntaService extends BaseService {
       }
     });
   }
-  
-  getAll(filter: Record<string, any> = {}) {
+
+  getAll(filter: AggiuntaFilterModel) {
     return this._prisma.aggiunta.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 

@@ -1,4 +1,4 @@
-import { CittaCreateModel } from "../dto/cittaDto";
+import { CittaCreateModel, CittaFilterModel } from "../dto/cittaDto";
 import { BaseService } from "./base";
 
 export class CittaService extends BaseService {
@@ -10,9 +10,9 @@ export class CittaService extends BaseService {
     });
   }
 
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: CittaFilterModel) {
     return this._prisma.citta.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 }

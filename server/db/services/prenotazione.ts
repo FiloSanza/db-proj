@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { PrenotazioneCreateModel } from "../dto/prenotazione";
+import { PrenotazioneCreateModel, PrenotazioneFilterModel } from "../dto/prenotazione";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
 import { DataViaggioService } from "./dataviaggio";
@@ -42,7 +42,7 @@ export class PrenotazioneService extends BaseService {
       //Creo la prenotazione
       let prenotazione = await prisma.prenotazione.create({
         data: {
-          DataAcquisto: new Date(data.dataAcquisto),
+          DataAcquisto: data.dataAcquisto,
           PrezzoTotale: prezzo,
           Cliente: {
             connect: { IdCliente: data.idCliente }
@@ -66,9 +66,9 @@ export class PrenotazioneService extends BaseService {
     });
   }
   
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: PrenotazioneFilterModel) {
     return this._prisma.prenotazione.findMany({
-      where: filter
+      where: filter.getFilterDict()
     });
   }
 }
