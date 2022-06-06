@@ -18,6 +18,8 @@
   "homepage": "https://github.com/FiloSanza/db-proj#readme",
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "@types/cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.6",
     "express": "^4.18.1",
     "express-validator": "^6.14.1",
     "prisma": "^3.14.0",

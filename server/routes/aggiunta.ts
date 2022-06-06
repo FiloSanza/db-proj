@@ -4,6 +4,7 @@ import { AggiuntaService } from "../db/services/aggiunta";
 import { aggiuntaRules } from "../validation/aggiunta";
 import { validator } from "../validation/utils";
 import { errorHandler } from "./utils";
+import { validateGuida } from "../auth/auth";
 
 export const routerAggiunta = Router();
 const service = new AggiuntaService();
@@ -11,6 +12,7 @@ const service = new AggiuntaService();
 routerAggiunta.post(
   '/create', 
   validator(aggiuntaRules.forCreate), 
+  validateGuida,
   (req, res, next) => {
     let dto = AggiuntaCreateModel.fromDict(req.body);
     service.create(dto)
