@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiuntaDto";
-import { ViaggioCreateModel } from "../dto/viaggioDto";
+import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggioDto";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
 
@@ -70,7 +70,7 @@ export class ViaggioService extends BaseService {
         let visita = data.visite[i];
         let insertedVisita = await prisma.visita.create({
           data: {
-            Ora: Number(visita.ora),
+            Ora: visita.ora,
             Attivita: {
               connect: { IdAttivita: visita.idAttivita }
             },
@@ -118,9 +118,9 @@ export class ViaggioService extends BaseService {
     });
   }
   
-  getAll(filter: Record<string, any> = {}) {
+  getAll(filter: ViaggioFilterModel) {
     return this._prisma.viaggio.findMany({
-      where: filter,
+      where: filter.getFilterDict(),
       include: {
         Giornate: {
           include: {

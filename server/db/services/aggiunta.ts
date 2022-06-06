@@ -1,8 +1,8 @@
-import { AggiuntaFilterModel, IAggiuntaCreateModel } from "../dto/aggiuntaDto";
+import { AggiuntaFilterModel, AggiuntaCreateModel } from "../dto/aggiuntaDto";
 import { BaseService } from "./base";
 
 export class AggiuntaService extends BaseService {
-  create(data: IAggiuntaCreateModel) {
+  create(data: AggiuntaCreateModel) {
     return this._prisma.aggiunta.create({
       data: {
         Descrizione: data.descrizione,

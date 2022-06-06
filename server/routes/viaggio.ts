@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ViaggioCreateModel } from "../db/dto/viaggioDto";
+import { ViaggioCreateModel, ViaggioFilterModel } from "../db/dto/viaggioDto";
 import { ViaggioService } from "../db/services/viaggio";
 import { validator } from "../validation/utils";
 import { viaggioRules } from "../validation/viaggio";
@@ -12,20 +12,18 @@ routerViaggio.post(
   '/create', 
   validator(viaggioRules.forCreate), 
   (req, res, next) => {
-    let dto = req.body as ViaggioCreateModel;
-    service.create(dto)
-    .then(results => res.send(results))
-    .catch(err => next(err));
+    service.create(ViaggioCreateModel.fromDict(req.body))
+      .then(results => res.send(results))
+      .catch(err => next(err));
   }
 )
   
 routerViaggio.get(
   '/',
   (req, res, next) => {
-    let filter = req.query as Record<string, any>;
-    service.getAll(filter)
-    .then(results => res.send(results))
-    .catch(err => next(err));
+    service.getAll(new ViaggioFilterModel(req.query))
+      .then(results => res.send(results))
+      .catch(err => next(err));
   }
 )
 

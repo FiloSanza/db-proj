@@ -1,13 +1,13 @@
 import { Prisma } from "@prisma/client";
 import { AbstractFilter, ConvertUtils } from "./utils";
 
-export interface IAggiuntaCreateModel {
+export interface IAggiuntaModel {
   descrizione: string,
   prezzo: number,
   aggiuntaVisita: boolean
 }
 
-export class AggiuntaModel implements IAggiuntaCreateModel {
+export class AggiuntaModel implements IAggiuntaModel {
   descrizione: string;
   prezzo: number;
   aggiuntaVisita: boolean;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GuidaRegistrationModel } from "../db/dto/guidaDto";
+import { GuidaCreateModel, GuidaFilterModel } from "../db/dto/guidaDto";
 import { GuidaService } from "../db/services/guida";
 import { guidaRules } from "../validation/guida";
 import { validator } from "../validation/utils";
@@ -12,8 +12,7 @@ routerGuida.post(
   '/register', 
   validator(guidaRules.forRegister), 
   (req, res, next) => {
-    let dto = req.body as GuidaRegistrationModel;
-    service.register(dto)
+    service.register(GuidaCreateModel.fromDict(req.body))
       .then(results => res.send(results))
       .catch(err => next(err));
   }
@@ -22,11 +21,7 @@ routerGuida.post(
 routerGuida.get(
   '/',
   (req, res, next) => {
-    let filter = req.query as Record<string, any>;
-    if ('IdGuida' in filter) {
-      filter.IdGuida = Number(filter.IdGuida);
-    }
-    service.getAll(filter)
+    service.getAll(new GuidaFilterModel(req.query))
       .then(results => res.send(results))
       .catch(err => next(err));
   }
