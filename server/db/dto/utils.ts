@@ -1,5 +1,3 @@
-import { validationResult } from "express-validator";
-
 export interface Filter {
   getFilterDict(): Record<string, any>;
 }
@@ -11,7 +9,6 @@ export abstract class AbstractFilter implements Filter {
   protected abstract getCastTable(): Record<string, any>;
   
   constructor(dict: Record<string, any> = {}) {
-    console.log(dict);
     this.populateFromDict(dict);
   }
 

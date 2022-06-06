@@ -23,9 +23,15 @@ export class PrenotazioneService extends BaseService {
           IdDataViaggio: data.idDataViaggio
         },
         select: {
-          Viaggio: true
+          Viaggio: true,
+          DataPartenza: true
         }
       });
+
+      if ((new Date()).getTime() > dataViaggio.DataPartenza.getTime()) {
+        throw new Error("Impossibile prenotare un viaggio gia partito");
+      }
+
       let aggiunteViaggio = 
         await viaggioService.getAllUpgrades(dataViaggio.Viaggio.IdViaggio);
       let valid = data.aggiunteIds.every(id => id in aggiunteViaggio);
@@ -38,6 +44,26 @@ export class PrenotazioneService extends BaseService {
       let prezzoAggiunte = await Promise.all(data.aggiunteIds.map(
         async id => (await aggiuntaService.getPrezzoAggiunta(id)) * aggiunteViaggio[id]));
       let prezzo = prezzoBase + prezzoAggiunte.reduce((acc, value) => acc + value, 0);
+
+      //Controllo che Cliente non sia in viaggio in quel periodo
+      let prenotazioniCliente = await prisma.prenotazione.findMany({
+        where: {
+          IdCliente: data.idCliente
+        },
+        select: {
+          IdDataViaggio: true
+        }
+      }).then(results => results.map(r => r.IdDataViaggio));
+
+      let periodoViaggio = await dataViaggioService.getDataInizioEDataFine(data.idDataViaggio);
+      valid = prenotazioniCliente.every(async p => {
+        let date = await dataViaggioService.getDataInizioEDataFine(p);
+        return periodoViaggio.fine.getTime() < date.inizio.getTime() || date.fine.getTime() < periodoViaggio.inizio.getTime();
+      });
+
+      if (!valid) {
+        throw new Error("Ci sono delle prenotazioni sovrapposte.");
+      }
 
       //Creo la prenotazione
       let prenotazione = await prisma.prenotazione.create({

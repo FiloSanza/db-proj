@@ -46,7 +46,7 @@ export class GuidaFilterModel extends AbstractFilter {
 
   protected getCastTable(): Record<string, any> {
     return {
-      IdGuida: ConvertUtils.identity,
+      IdGuida: ConvertUtils.toInt,
       Nome: ConvertUtils.identity,
       Cognome: ConvertUtils.identity,
       DataNascita: ConvertUtils.toDate,

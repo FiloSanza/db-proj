@@ -85,4 +85,27 @@ export class DataViaggioService extends BaseService {
     }).then(result => 
       result.PrezzoBase.toNumber() * (1 - ((result?.Sconto.Percentuale) ?? 0) / 100));
   }
+
+  async getDataInizioEDataFine(idDataViaggio: number) {
+    let data = await this._prisma.dataViaggio.findUnique({
+      where: {
+        IdDataViaggio: idDataViaggio
+      },
+      select: {
+        DataPartenza: true,
+        Viaggio: {
+          select: {
+            Giornate: true
+          }
+        }
+      }
+    });
+
+    let result = data.DataPartenza;
+    result.setDate(result.getDate() + data.Viaggio.Giornate.length);
+    return {
+      inizio: data.DataPartenza,
+      fine: result
+    };
+  }
 }
