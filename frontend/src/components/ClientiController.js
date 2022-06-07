@@ -4,7 +4,7 @@ import NewUtente from "./NewUtente"
 
 import { httpHelper } from "../helpers/httpHelper"
 
-const CrudClienti = () => {
+const ClientiController = () => {
 	const [users, setUsers] = useState(null)
 
 	const url = "http://localhost:8080/api/cliente"
@@ -67,4 +67,4 @@ const CrudClienti = () => {
 	)
 }
 
-export default CrudClienti;
+export default ClientiController;

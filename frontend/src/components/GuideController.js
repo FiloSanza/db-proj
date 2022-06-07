@@ -4,7 +4,7 @@ import NewUtente from "./NewUtente"
 
 import { httpHelper } from "../helpers/httpHelper"
 
-const CrudGuide = () => {
+const GuideController = () => {
 	const [users, setUsers] = useState(null)
 
 	const url = "http://localhost:8080/api/guida"
@@ -66,4 +66,4 @@ const CrudGuide = () => {
 	)
 }
 
-export default CrudGuide;
+export default GuideController;
