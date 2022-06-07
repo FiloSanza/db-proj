@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
+import NewTag from "./NewTag"
 import { httpHelper } from "../helpers/httpHelper"
-import NewCitta from "./NewCitta"
 
-const CrudCitta = () => {
+const TagController = () => {
 	const [users, setUsers] = useState(null)
 
-	const url = "http://localhost:8080/api/citta"
+	const url = "http://localhost:8080/api/tag"
 	const api = httpHelper()
 
 	useEffect(() => {
@@ -34,12 +34,12 @@ const CrudCitta = () => {
 
 	return (
 		<>
-    <h3>Nuova Citta</h3>
-    <NewCitta 
+    <h3>Nuovo Tag</h3>
+    <NewTag 
       postUser={postUser}
     />
     <div className='all-users'>
-      <h3>Citta</h3>
+      <h3>Tag</h3>
       <Table striped>
         <thead>
           <tr>
@@ -49,9 +49,9 @@ const CrudCitta = () => {
         <tbody>
           { users &&
             users.map(u => 
-              <tr key={u.IdCitta}>
-                <td> { u.IdCitta } </td>
-                <td> { u.Nome } </td>
+              <tr key={u.IdTag}>
+                <td> { u.IdTag } </td>
+                <td> { u.Descrizione } </td>
               </tr>
             )
           }
@@ -62,4 +62,4 @@ const CrudCitta = () => {
 	)
 }
 
-export default CrudCitta;
+export default TagController;

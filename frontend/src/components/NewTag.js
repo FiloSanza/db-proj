@@ -23,7 +23,7 @@ const NewTag = ({ userData = {}, postUser }) => {
         <Form.Label>
           Descrizione
         </Form.Label>
-        <Form.Control type="text" placeholder="Descrizione" name="descrizione" onChange={handleValue} />
+        <Form.Control type="text" placeholder="Descrizione" name="descrizione" maxLength={500} onChange={handleValue} />
       </Form.Group>
       <Button variant="primary" type="submit">
         Crea

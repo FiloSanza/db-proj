@@ -8,8 +8,8 @@ import {
     Routes
 } from "react-router-dom";
 import AgenziaNavbar from "./components/AgenziaNavbar";
-import CrudTag from "./components/CrudTag";
-import CrudCitta from "./components/CrudCitta";
+import CittaController from "./components/CittaController";
+import TagController from "./components/TagController";
 
 const App = () => (
   <div className="App">
@@ -18,8 +18,8 @@ const App = () => (
         <AgenziaNavbar></AgenziaNavbar>
         <Routes>
           <Route path="/" element={<h1>CIAO</h1>} />
-          <Route path="/tag" element={<CrudTag />} />
-          <Route path="/citta" element={<CrudCitta />} />
+          <Route path="/tag" element={<TagController />} />
+          <Route path="/citta" element={<CittaController />} />
           <Route path="/guide" element={<GuideController />} />
           <Route path="/clienti" element={<ClientiController />} />
         </Routes>

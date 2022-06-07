@@ -23,7 +23,7 @@ const NewCitta = ({ userData = {}, postUser }) => {
         <Form.Label>
           Nome
         </Form.Label>
-        <Form.Control type="text" placeholder="Nome" name="nome" onChange={handleValue} />
+        <Form.Control type="text" placeholder="Nome" name="nome" maxLength={500} onChange={handleValue} />
       </Form.Group>
       <Button variant="primary" type="submit">
         Crea
