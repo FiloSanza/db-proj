@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import CrudClienti from "./components/CrudClienti";
-import CrudGuide from "./components/CrudGuide";
+import ClientiController from "./components/ClientiController";
+import GuideController from "./components/GuideController";
 import './styles/App.css';
 import {
     BrowserRouter,
@@ -16,8 +16,8 @@ const App = () => (
         <AgenziaNavbar></AgenziaNavbar>
         <Routes>
           <Route path="/" element={<h1>CIAO</h1>} />
-          <Route path="/guide" element={<CrudGuide />} />
-          <Route path="/clienti" element={<CrudClienti />} />
+          <Route path="/guide" element={<GuideController />} />
+          <Route path="/clienti" element={<ClientiController />} />
         </Routes>
       </div>
     </BrowserRouter>

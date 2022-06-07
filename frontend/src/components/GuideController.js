@@ -4,10 +4,10 @@ import NewUtente from "./NewUtente"
 
 import { httpHelper } from "../helpers/httpHelper"
 
-const CrudClienti = () => {
+const GuideController = () => {
 	const [users, setUsers] = useState(null)
 
-	const url = "http://localhost:8080/api/cliente"
+	const url = "http://localhost:8080/api/guida"
 	const api = httpHelper()
 
 	useEffect(() => {
@@ -26,7 +26,6 @@ const CrudClienti = () => {
 		api
 			.get(`${url}`)
 			.then(res => {
-        console.log(res)
 				setUsers(res)
 			})
 			.catch(err => console.log(err))
@@ -36,12 +35,12 @@ const CrudClienti = () => {
 
 	return (
 		<>
-    <h3>Nuovo Cliente</h3>
+    <h3>Nuovo Guida</h3>
     <NewUtente 
       postUser={postUser}
     />
     <div className='all-users'>
-      <h3>Clienti</h3>
+      <h3>Guide</h3>
       <Table striped>
         <thead>
           <tr>
@@ -51,8 +50,8 @@ const CrudClienti = () => {
         <tbody>
           { users &&
             users.map(u => 
-              <tr key={u.IdCliente}>
-                <td> { u.IdCliente } </td>
+              <tr key={u.IdGuida}>
+                <td> { u.IdGuida } </td>
                 <td> { u.Nome } </td>
                 <td> { u.Cognome } </td>
                 <td> { u.Email } </td>
@@ -67,4 +66,4 @@ const CrudClienti = () => {
 	)
 }
 
-export default CrudClienti;
+export default GuideController;
