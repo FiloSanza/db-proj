@@ -45,7 +45,7 @@ const ClientiController = () => {
       <Table striped>
         <thead>
           <tr>
-            {users && Object.keys(users[0]).map(k => <th key={k}>{ k }</th>)}
+            {(users && users.length > 0) && Object.keys(users[0]).map(k => <th key={k}>{ k }</th>)}
           </tr>
         </thead>
         <tbody>

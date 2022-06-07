@@ -26,19 +26,19 @@ const NewUtente = ({ userData = {}, postUser }) => {
         <Form.Label>
           Nome
         </Form.Label>
-        <Form.Control type="text" placeholder="Nome" name="nome" onChange={handleValue} />
+        <Form.Control type="text" placeholder="Nome" name="nome" maxLength={100} onChange={handleValue} />
       </Form.Group>
       <Form.Group>
         <Form.Label>
           Cognome
         </Form.Label>
-        <Form.Control type="text" placeholder="Cognome" name="cognome" onChange={handleValue} />
+        <Form.Control type="text" placeholder="Cognome" name="cognome" maxLength={100} onChange={handleValue} />
       </Form.Group>
       <Form.Group>
         <Form.Label>
           Email
         </Form.Label>
-        <Form.Control type="email" placeholder="Email" name="email" onChange={handleValue} />
+        <Form.Control type="email" placeholder="Email" name="email" maxLength={50} onChange={handleValue} />
       </Form.Group>
       <Form.Group>
         <Form.Label>
