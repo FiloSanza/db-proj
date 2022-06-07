@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
-import NewUtente from "./NewUtente"
-
+import NewTag from "./NewTag"
 import { httpHelper } from "../helpers/httpHelper"
 
-const CrudGuide = () => {
+const CrudTag = () => {
 	const [users, setUsers] = useState(null)
 
-	const url = "http://localhost:8080/api/guida"
+	const url = "http://localhost:8080/api/tag"
 	const api = httpHelper()
 
 	useEffect(() => {
@@ -17,7 +16,7 @@ const CrudGuide = () => {
 	const postUser = user => {
     console.log(user);
 		api
-			.post(`${url}/register`, { body: user })
+			.post(`${url}/create`, { body: user })
 			.then(res => getUsers())
 			.catch(err => console.log(err))
 	}
@@ -35,12 +34,12 @@ const CrudGuide = () => {
 
 	return (
 		<>
-    <h3>Nuova Guida</h3>
-    <NewUtente 
+    <h3>Nuovo Tag</h3>
+    <NewTag 
       postUser={postUser}
     />
     <div className='all-users'>
-      <h3>Guide</h3>
+      <h3>Tag</h3>
       <Table striped>
         <thead>
           <tr>
@@ -50,12 +49,9 @@ const CrudGuide = () => {
         <tbody>
           { users &&
             users.map(u => 
-              <tr key={u.IdGuida}>
-                <td> { u.IdGuida } </td>
-                <td> { u.Nome } </td>
-                <td> { u.Cognome } </td>
-                <td> { u.Email } </td>
-                <td> { (new Date(u.DataNascita)).toLocaleDateString("it-IT") } </td>
+              <tr key={u.IdTag}>
+                <td> { u.IdTag } </td>
+                <td> { u.Descrizione } </td>
               </tr>
             )
           }
@@ -66,4 +62,4 @@ const CrudGuide = () => {
 	)
 }
 
-export default CrudGuide;
+export default CrudTag;
