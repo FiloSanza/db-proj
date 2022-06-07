@@ -8,7 +8,7 @@ export class ClienteService extends BaseService {
         Nome: data.nome,
         Cognome: data.cognome,
         Email: data.email,
-        DataNascita: data.dataNascita
+        DataNascita: data.dataNascita.toISOString()
       }
     });
   }

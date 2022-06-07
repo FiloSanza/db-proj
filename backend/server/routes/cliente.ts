@@ -10,7 +10,7 @@ const service = new ClienteService();
 
 routerCliente.post(
   '/register', 
-  validator(clienteRules.forRegister), 
+  // validator(clienteRules.forRegister), 
   (req, res, next) => {
     service.register(ClienteCreateModel.fromDict(req.body))
       .then(results => res.send(results))
