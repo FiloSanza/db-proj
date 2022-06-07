@@ -8,6 +8,7 @@ import {
     Routes
 } from "react-router-dom";
 import AgenziaNavbar from "./components/AgenziaNavbar";
+import AttivitaController from "./components/AttivitaController";
 
 const App = () => (
   <div className="App">
@@ -18,6 +19,7 @@ const App = () => (
           <Route path="/" element={<h1>CIAO</h1>} />
           <Route path="/guide" element={<GuideController />} />
           <Route path="/clienti" element={<ClientiController />} />
+          <Route path="/attivita" element={<AttivitaController />} />
         </Routes>
       </div>
     </BrowserRouter>

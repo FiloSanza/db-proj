@@ -10,6 +10,9 @@ const AgenziaNavbar = () => {
       <Nav className="me-auto">
         <Nav.Link href="/clienti">Clienti</Nav.Link>
         <Nav.Link href="/guide">Guide</Nav.Link>
+        <Nav.Link href="/attivita">Attivita</Nav.Link>
+        <Nav.Link href="/citta">Citta</Nav.Link>
+        <Nav.Link href="/tag">Tag</Nav.Link>
       </Nav>
       </Container>
     </Navbar>

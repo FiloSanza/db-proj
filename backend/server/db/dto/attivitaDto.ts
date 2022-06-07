@@ -26,6 +26,7 @@ export class AttivitaModel implements AttivitaModel{
   }
 
   public static fromDict(dict: Record<string, any>): AttivitaModel {
+    console.log(dict);
     return new AttivitaModel(
       dict.descrizione,
       Number(dict.durata),
