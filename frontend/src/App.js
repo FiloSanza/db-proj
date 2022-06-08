@@ -11,6 +11,7 @@ import AgenziaNavbar from "./components/AgenziaNavbar";
 import AttivitaController from "./components/AttivitaController";
 import CittaController from "./components/CittaController";
 import TagController from "./components/TagController";
+import CreateViaggio from "./components/viaggio/CreateViaggio";
 
 const App = () => (
   <div className="App">
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/guide" element={<GuideController />} />
           <Route path="/clienti" element={<ClientiController />} />
           <Route path="/attivita" element={<AttivitaController />} />
+          <Route path="/viaggio" element={<CreateViaggio />} />
         </Routes>
       </div>
     </BrowserRouter>
