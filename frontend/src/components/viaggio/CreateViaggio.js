@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Button from "react-bootstrap/esm/Button";
+import Form from "react-bootstrap/esm/Form";
 import { httpHelper } from "../../helpers/httpHelper"
 import NewGiornata from "./NewGiornata";
 
@@ -10,7 +11,8 @@ const CreateViaggio = () => {
     aggiunteVisita: [],
     visite: [],
     giornate: [],
-    inputGiornate: []
+    inputGiornate: [],
+    periodo: {}
   });
 
 	const urlAttivita = "http://localhost:8080/api/attivita"
@@ -42,22 +44,40 @@ const CreateViaggio = () => {
 	}
 
   const updateGiornata = (numero, key, value) => {
-    let giornate = data.giornate;
-    giornate[numero-1] = {
-      ...giornate[numero-1],
+    data.giornate[numero-1] = {
+      ...data.giornate[numero-1],
       [key]: value
     };
     setData({
       ...data,
-      giornate: giornate
+      giornate: data.giornate
     })
+  }
+
+  const updateVisite = (idx, key, value) => {
+    console.log("Update: ", idx, key, value);
+    data.visite[idx] = {
+      ...data.visite[idx],
+      [key]: value
+    };
+    setData({
+      ...data,
+      visite: data.visite
+    });
   }
   
   const addGiornata = () => {
     let id = data.inputGiornate.length + 1;
     let inputGiornate = data.inputGiornate;
     inputGiornate.push((
-      <NewGiornata key={id} id={id} updateGiornata={updateGiornata} attivita={data.attivita} upgradeVisita={data.aggiunteVisita} ></NewGiornata>
+      <NewGiornata 
+        key={id} 
+        id={id} 
+        updateGiornata={updateGiornata} 
+        attivita={data.attivita} 
+        updateVisite={updateVisite} 
+        upgradeVisita={data.aggiunteVisita}
+        getVisitaIdx={getVisitaIdx} />
     ))
     let giornate = data.giornate;
     data.giornate.push({numero: id, descrizione: ""});
@@ -69,15 +89,117 @@ const CreateViaggio = () => {
     });
   }
 
+  const handleValue = e => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handlePeriodo = e => {
+    setData({
+      ...data,
+      periodo: {
+        ...data.periodo,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  const handleAggiuntaViaggio = e => {
+    let updates = Array.from(document.getElementById("aggiunteViaggioSelect").children)
+      .filter(u => u.selected)
+      .map(u => u.value);
+
+    handleValue({target: {name: "upgradeViaggioIds", value: updates}});
+  }
+
+  const postViaggio = e => {
+    e.preventDefault();
+
+    let viaggio = { ...data };
+    delete viaggio["aggiunteVisita"];
+    delete viaggio["aggiunteViaggio"];
+    delete viaggio["inputGiornate"];
+    delete viaggio["attivita"];
+
+    console.log(viaggio);
+
+    api.post(`${url}/create`, { body: viaggio })
+			.then(res => alert(res))
+			.catch(err => console.log(err))
+  }
+
+  const getVisitaIdx = () => {
+    let visite = data.visite;
+    visite.push({
+      idAttivita: "",
+      ora: "",
+      updates: []
+    });
+    setData({
+      ...data,
+      visite: visite
+    });
+    return visite.length-1;
+  };
+
   return (
     <div>
       { JSON.stringify(data) }
       
+      <h2>Viaggio</h2>
+      <Form>
+        <Form.Group>
+          <Form.Label>
+            Descrizione
+          </Form.Label>
+          <Form.Control type="text" placeholder="Descrizione" name="descrizione" maxLength={500} onChange={handleValue} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Giorno inizio periodo
+          </Form.Label>
+          <Form.Control type="number" placeholder="Giorno" name="giornoInizio" onChange={handlePeriodo} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Mese inizio periodo
+          </Form.Label>
+          <Form.Control type="number" placeholder="Mese" name="meseInizio" onChange={handlePeriodo} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Giorno fine periodo
+          </Form.Label>
+          <Form.Control type="number" placeholder="Giorno" name="giornoFine" onChange={handlePeriodo} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Mese fine periodo
+          </Form.Label>
+          <Form.Control type="number" placeholder="Mese" name="meseFine" onChange={handlePeriodo} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Aggiunte Viaggio
+          </Form.Label>
+          <Form.Select multiple id="aggiunteViaggioSelect" onChange={handleAggiuntaViaggio} >
+            {
+              data.aggiunteViaggio.length > 0 &&
+                data.aggiunteViaggio.map(a => <option key={a.IdAggiunta} value={a.IdAggiunta}>{a.Descrizione}</option>)
+            }
+          </Form.Select>
+        </Form.Group>
+      </Form>
+
       <div>
         { data.inputGiornate }
       </div>
 
       <Button onClick={addGiornata}>Aggiungi Giornata</Button>
+      <br></br>
+      <Button onClick={postViaggio}>Aggiungi Viaggio</Button>
     </div>
   )
 };

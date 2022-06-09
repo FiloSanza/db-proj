@@ -13,6 +13,7 @@ const AgenziaNavbar = () => {
         <Nav.Link href="/attivita">Attivita</Nav.Link>
         <Nav.Link href="/citta">Citta</Nav.Link>
         <Nav.Link href="/tag">Tag</Nav.Link>
+        <Nav.Link href="/viaggio">Viaggio</Nav.Link>
       </Nav>
       </Container>
     </Navbar>

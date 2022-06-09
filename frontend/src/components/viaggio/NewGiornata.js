@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button"
 import { React, useState } from "react";
 import NewVisita from "./NewVisita";
 
-const NewGiornata = ({ id, updateGiornata, updateVisite, attivita, upgradeVisita }) => {
+const NewGiornata = ({ id, updateGiornata, updateVisite, attivita, upgradeVisita, getVisitaIdx }) => {
   const [data, setData] = useState({
     inputVisite: []
   })
@@ -12,7 +12,7 @@ const NewGiornata = ({ id, updateGiornata, updateVisite, attivita, upgradeVisita
     let id = data.inputVisite.length + 1;
     let inputVisite = data.inputVisite;
     inputVisite.push((
-      <NewVisita key={id} id={id} attivita={attivita} upgrade={upgradeVisita} ></NewVisita>
+      <NewVisita key={id} idx={getVisitaIdx()} id={id} attivita={attivita} upgrade={upgradeVisita} updateVisite={updateVisite} ></NewVisita>
     ))
     setData({
       ...data,

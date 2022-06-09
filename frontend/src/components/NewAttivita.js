@@ -35,7 +35,7 @@ const NewAttivita = ({ attivitaData = {}, postAttivita, data }) => {
       idTags: tags
     });
     
-    console.log(attivita);
+    // console.log(attivita);
     postAttivita(attivita);
   }
 

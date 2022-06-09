@@ -1,13 +1,23 @@
 import Form from "react-bootstrap/Form";
 import { React, useState } from "react";
 
-const NewVisita = ({ id, updateVisite, attivita, upgrade }) => {  
-  const handleAttivita = e => {
-
-  }
+const NewVisita = ({ idx, id, updateVisite, attivita, upgrade, numeroGiornata }) => {    
+  updateVisite(idx, "numeroGiornata", numeroGiornata);
   
   const handleValue = e => {
+    updateVisite(idx, e.target.name, e.target.value);
+  }
 
+  const handleAttivita = e => {
+    updateVisite(idx, "idAttivita", e.target.value);
+  }
+
+  const handleUpgrade = e => {
+    let updates = Array.from(document.getElementById("upgradeSelect").children)
+      .filter(u => u.selected)
+      .map(u => u.value);
+
+    updateVisite(idx, "updates", updates);
   }
 
   return (
@@ -28,21 +38,21 @@ const NewVisita = ({ id, updateVisite, attivita, upgrade }) => {
         </Form.Group>
         <Form.Group>
           <Form.Label>
-            Durata
+            Ora
           </Form.Label>
-          <Form.Control type="text" placeholder="Durata" name="durata" maxLength={500} onChange={handleValue} />
+          <Form.Control type="number" placeholder="Ora" name="ora" maxLength={500} onChange={handleValue} />
         </Form.Group>
         <Form.Group>
-        <Form.Label>
-          Scegli quali aggiunte rendere disponibili
-        </Form.Label>
-        <Form.Select multiple id="tagSelect" >
-          {
-            upgrade.length > 0 &&
-              upgrade.map(u => <option key={u.IdAggiunta} value={u.IdAggiunta}>{u.Descrizione} - {u.Prezzo}€</option>)
-          }
-        </Form.Select>
-      </Form.Group>
+          <Form.Label>
+            Scegli quali aggiunte rendere disponibili
+          </Form.Label>
+          <Form.Select multiple id="upgradeSelect" onClick={handleUpgrade} >
+            {
+              upgrade.length > 0 &&
+                upgrade.map(u => <option key={u.IdAggiunta} value={u.IdAggiunta}>{u.Descrizione} - {u.Prezzo}€</option>)
+            }
+          </Form.Select>
+        </Form.Group>
       </Form>
     </>
   );

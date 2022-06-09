@@ -17,16 +17,18 @@ const App = () => (
   <div className="App">
     <BrowserRouter>
       <div>
-        <AgenziaNavbar></AgenziaNavbar>
-        <Routes>
-          <Route path="/" element={<h1>CIAO</h1>} />
-          <Route path="/tag" element={<TagController />} />
-          <Route path="/citta" element={<CittaController />} />
-          <Route path="/guide" element={<GuideController />} />
-          <Route path="/clienti" element={<ClientiController />} />
-          <Route path="/attivita" element={<AttivitaController />} />
-          <Route path="/viaggio" element={<CreateViaggio />} />
-        </Routes>
+        <AgenziaNavbar />
+        <div className="bg-light p-5">
+          <Routes>
+            <Route path="/" element={<h1>CIAO</h1>} />
+            <Route path="/tag" element={<TagController />} />
+            <Route path="/citta" element={<CittaController />} />
+            <Route path="/guide" element={<GuideController />} />
+            <Route path="/clienti" element={<ClientiController />} />
+            <Route path="/attivita" element={<AttivitaController />} />
+            <Route path="/viaggio" element={<CreateViaggio />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
   </div>
