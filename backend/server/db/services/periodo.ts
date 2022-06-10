@@ -1,4 +1,4 @@
-import { PeriodoFilterModel, PeriodoViaggio } from "../dto/viaggioDto";
+import { PeriodoFilterModel, PeriodoViaggio } from "../dto/viaggio";
 import { BaseService } from "./base";
 
 export class PeriodoViaggioService extends BaseService {  

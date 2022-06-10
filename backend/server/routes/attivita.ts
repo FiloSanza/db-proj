@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AttivitaCreateModel, AttivitaFilterModel } from "../db/dto/attivitaDto";
+import { AttivitaCreateModel, AttivitaFilterModel } from "../db/dto/attivita";
 import { AttivitaService } from "../db/services/attivita";
 import { attivitaRules } from "../validation/attivita";
 import { validator } from "../validation/utils";

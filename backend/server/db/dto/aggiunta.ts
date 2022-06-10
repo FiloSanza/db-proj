@@ -22,7 +22,7 @@ export class AggiuntaModel implements IAggiuntaModel {
     return new AggiuntaModel(
       dict.descrizione, 
       Number(dict.prezzo), 
-      Boolean(dict.aggiuntaVisita));
+      ConvertUtils.toBoolean(dict.aggiuntaVisita));
   }
 }
 

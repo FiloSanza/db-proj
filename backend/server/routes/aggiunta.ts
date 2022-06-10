@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AggiuntaCreateModel, AggiuntaFilterModel } from "../db/dto/aggiuntaDto";
+import { AggiuntaCreateModel, AggiuntaFilterModel } from "../db/dto/aggiunta";
 import { AggiuntaService } from "../db/services/aggiunta";
 import { aggiuntaRules } from "../validation/aggiunta";
 import { validator } from "../validation/utils";

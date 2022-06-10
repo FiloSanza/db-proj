@@ -1,4 +1,4 @@
-import { AggiuntaFilterModel, AggiuntaCreateModel } from "../dto/aggiuntaDto";
+import { AggiuntaFilterModel, AggiuntaCreateModel } from "../dto/aggiunta";
 import { BaseService } from "./base";
 
 export class AggiuntaService extends BaseService {

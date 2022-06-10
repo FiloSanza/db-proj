@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiuntaDto";
-import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggioDto";
+import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiunta";
+import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggio";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ViaggioCreateModel, ViaggioFilterModel } from "../db/dto/viaggioDto";
+import { ViaggioCreateModel, ViaggioFilterModel } from "../db/dto/viaggio";
 import { ViaggioService } from "../db/services/viaggio";
 import { validator } from "../validation/utils";
 import { viaggioRules } from "../validation/viaggio";

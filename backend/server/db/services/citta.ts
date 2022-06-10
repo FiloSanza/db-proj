@@ -1,4 +1,4 @@
-import { CittaCreateModel, CittaFilterModel } from "../dto/cittaDto";
+import { CittaCreateModel, CittaFilterModel } from "../dto/citta";
 import { BaseService } from "./base";
 
 export class CittaService extends BaseService {

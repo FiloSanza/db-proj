@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CittaCreateModel, CittaFilterModel } from "../db/dto/cittaDto";
+import { CittaCreateModel, CittaFilterModel } from "../db/dto/citta";
 import { CittaService } from "../db/services/citta";
 import { cittaRules } from "../validation/citta";
 import { validator } from "../validation/utils";

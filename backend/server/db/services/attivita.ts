@@ -1,4 +1,4 @@
-import { AttivitaCreateModel, AttivitaDto, AttivitaFilterModel } from "../dto/attivitaDto";
+import { AttivitaCreateModel, AttivitaDto, AttivitaFilterModel } from "../dto/attivita";
 import { BaseService } from "./base";
 
 export class AttivitaService extends BaseService {
