@@ -1,4 +1,4 @@
-import { ClienteFilterModel, ClienteCreateModel } from "../dto/clienteDto";
+import { ClienteFilterModel, ClienteCreateModel } from "../dto/cliente";
 import { BaseService } from "./base";
 
 export class ClienteService extends BaseService {

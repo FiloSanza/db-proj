@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GuidaCreateModel, GuidaFilterModel } from "../db/dto/guidaDto";
+import { GuidaCreateModel, GuidaFilterModel } from "../db/dto/guida";
 import { GuidaService } from "../db/services/guida";
 import { guidaRules } from "../validation/guida";
 import { validator } from "../validation/utils";

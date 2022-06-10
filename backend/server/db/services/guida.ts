@@ -1,4 +1,4 @@
-import { GuidaCreateModel, GuidaFilterModel } from "../dto/guidaDto";
+import { GuidaCreateModel, GuidaFilterModel } from "../dto/guida";
 import { BaseService } from "./base";
 
 export class GuidaService extends BaseService {

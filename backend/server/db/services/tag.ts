@@ -1,4 +1,4 @@
-import { TagCreateModel, TagFilterModel } from "../dto/tagDto";
+import { TagCreateModel, TagFilterModel } from "../dto/tag";
 import { BaseService } from "./base";
 
 export class TagService extends BaseService {

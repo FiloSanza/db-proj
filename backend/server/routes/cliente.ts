@@ -3,7 +3,7 @@ import { ClienteService } from "../db/services/cliente";
 import { clienteRules } from "../validation/cliente";
 import { validator } from "../validation/utils";
 import { errorHandler } from "./utils";
-import { ClienteCreateModel, ClienteFilterModel } from "../db/dto/clienteDto";
+import { ClienteCreateModel, ClienteFilterModel } from "../db/dto/cliente";
 
 export const routerCliente = Router();
 const service = new ClienteService();

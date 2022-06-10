@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ClienteFilterModel } from "../db/dto/clienteDto";
-import { GuidaFilterModel } from "../db/dto/guidaDto";
+import { ClienteFilterModel } from "../db/dto/cliente";
+import { GuidaFilterModel } from "../db/dto/guida";
 import { ClienteService } from "../db/services/cliente";
 import { GuidaService } from "../db/services/guida";
 

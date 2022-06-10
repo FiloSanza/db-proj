@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { TagCreateModel, TagFilterModel } from "../db/dto/tagDto";
+import { TagCreateModel, TagFilterModel } from "../db/dto/tag";
 import { TagService } from "../db/services/tag";
 import { tagRules } from "../validation/tag";
 import { validator } from "../validation/utils";
