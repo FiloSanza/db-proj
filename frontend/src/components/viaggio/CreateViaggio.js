@@ -12,6 +12,7 @@ const CreateViaggio = () => {
     visite: [],
     giornate: [],
     inputGiornate: [],
+    upgradeViaggioIds: [],
     periodo: {}
   });
 
@@ -126,7 +127,6 @@ const CreateViaggio = () => {
     console.log(viaggio);
 
     api.post(`${url}/create`, { body: viaggio })
-			.then(res => alert(res))
 			.catch(err => console.log(err))
   }
 
