@@ -4,51 +4,51 @@ import { httpHelper } from "../helpers/httpHelper"
 import NewCitta from "./NewCitta"
 
 const CittaController = () => {
-	const [users, setUsers] = useState(null)
+	const [citta, setCitta] = useState(null)
 
 	const url = "http://localhost:8080/api/citta"
 	const api = httpHelper()
 
 	useEffect(() => {
-		getUsers()
-	}, [])
+		getCitta()
+	})
 
-	const postUser = user => {
-    console.log(user);
+	const postCitta = citta => {
+    console.log(citta);
 		api
-			.post(`${url}/create`, { body: user })
-			.then(res => getUsers())
+			.post(`${url}/create`, { body: citta })
+			.then(res => getCitta())
 			.catch(err => console.log(err))
 	}
 
-	const getUsers = () => {
+	const getCitta = () => {
 		api
 			.get(`${url}`)
 			.then(res => {
-				setUsers(res)
+				setCitta(res)
 			})
 			.catch(err => console.log(err))
 	}
 
-	if (!users) return null
+	if (!citta) return null
 
 	return (
 		<>
     <h3>Nuova Citta</h3>
     <NewCitta 
-      postUser={postUser}
+      postCitta={postCitta}
     />
     <div className='all-users'>
       <h3>Citta</h3>
       <Table striped>
         <thead>
           <tr>
-            {(users && users.length > 0) && Object.keys(users[0]).map(k => <th key={k}>{ k }</th>)}
+            {(citta && citta.length > 0) && Object.keys(citta[0]).map(k => <th key={k}>{ k }</th>)}
           </tr>
         </thead>
         <tbody>
-          { users &&
-            users.map(u => 
+          { citta &&
+            citta.map(u => 
               <tr key={u.IdCitta}>
                 <td> { u.IdCitta } </td>
                 <td> { u.Nome } </td>

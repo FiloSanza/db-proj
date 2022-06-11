@@ -2,19 +2,19 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button"
 import { React, useState } from "react";
 
-const NewTag = ({ userData = {}, postUser }) => {
-  const [user, setUser] = useState({
-    descrizione: userData.Descrizione ?? "",
+const NewTag = ({ tagData = {}, postTag }) => {
+  const [tag, setTag] = useState({
+    descrizione:  "",
   })
 
   const handleValue = e => {
-    setUser({ ...user, [e.target.name]: e.target.value })
-    console.log(user)
+    setTag({ ...tag, [e.target.name]: e.target.value })
+    console.log(tag)
   }
 
   const submitTag = e => {
     e.preventDefault();
-    postUser(user);
+    postTag(tag);
   }
 
   return (
