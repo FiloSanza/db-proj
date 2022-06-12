@@ -24,9 +24,7 @@ const CittaController = () => {
 	const getCitta = () => {
 		api
 			.get(`${url}`)
-			.then(res => {
-				setCitta(res)
-			})
+			.then(res => setCitta(res))
 			.catch(err => console.log(err))
 	}
 
@@ -48,10 +46,10 @@ const CittaController = () => {
         </thead>
         <tbody>
           { citta &&
-            citta.map(u => 
-              <tr key={u.IdCitta}>
-                <td> { u.IdCitta } </td>
-                <td> { u.Nome } </td>
+            Array.from(citta).map(c => 
+              <tr key={c.IdCitta}>
+                <td> { c.IdCitta } </td>
+                <td> { c.Nome } </td>
               </tr>
             )
           }

@@ -81,7 +81,7 @@ const NewDataViaggio = ({ dataviaggioData = {}, postData, data }) => {
       </Form.Group>
       <Form.Group>
         <Form.Label>
-          Sconto
+          Sconto(%)
         </Form.Label>
         <Form.Control type="number" placeholder="Sconto" name="sconto" onChange={handleValue} />
       </Form.Group>

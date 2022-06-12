@@ -25,10 +25,7 @@ const ClientiController = () => {
 	const getUsers = () => {
 		api
 			.get(`${url}`)
-			.then(res => {
-        console.log(res)
-				setUsers(res)
-			})
+			.then(res => setUsers(res))
 			.catch(err => console.log(err))
 	}
 
@@ -55,8 +52,8 @@ const ClientiController = () => {
                 <td> { u.IdCliente } </td>
                 <td> { u.Nome } </td>
                 <td> { u.Cognome } </td>
-                <td> { u.Email } </td>
                 <td> { (new Date(u.DataNascita)).toLocaleDateString("it-IT") } </td>
+                <td> { u.Email } </td>
               </tr>
             )
           }

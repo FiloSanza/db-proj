@@ -9,7 +9,6 @@ const NewTag = ({ tagData = {}, postTag }) => {
 
   const handleValue = e => {
     setTag({ ...tag, [e.target.name]: e.target.value })
-    console.log(tag)
   }
 
   const submitTag = e => {

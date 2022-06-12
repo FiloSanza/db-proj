@@ -17,7 +17,7 @@ const DataViaggioController = () => {
 
 	useEffect(() => {
 		loadData();
-	}, [])
+	})
 
 	const postData = data => {
 		api
@@ -45,8 +45,7 @@ const DataViaggioController = () => {
     Promise.all([getGuide(), getViaggi(), api.get(`${url}`)])
       .then(res => {
         setData({guide: res[0], viaggi: res[1],dataViaggio: res[2]});
-      })
-      ;
+      });
   }
 
 	if (!data) return null
@@ -72,13 +71,13 @@ const DataViaggioController = () => {
         </thead>
         <tbody>
           { data.dataViaggio &&
-            data.dataViaggio.map(d => 
-              <tr key={d.idDataViaggio}>
-                <td> { d.idDataViaggio } </td>
-                <td> { (new Date(d.dataPartenza)).toLocaleDateString("it-IT") } </td>
-                <td> { d.posti } </td>
-                <td> { d.prezzoBase } </td>
-                <td> { d.sconto } </td>
+            Array.from(data.dataViaggio).map(dv => 
+              <tr key={dv.idDataViaggio}>
+                <td> { dv.idDataViaggio } </td>
+                <td> { (new Date(dv.dataPartenza)).toLocaleDateString("it-IT") } </td>
+                <td> { dv.posti } </td>
+                <td> { dv.prezzoBase } </td>
+                <td> { dv.sconto } </td>
               </tr>
             )
           }

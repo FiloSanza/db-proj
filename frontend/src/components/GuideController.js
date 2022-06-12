@@ -54,8 +54,8 @@ const GuideController = () => {
                 <td> { u.IdGuida } </td>
                 <td> { u.Nome } </td>
                 <td> { u.Cognome } </td>
-                <td> { u.Email } </td>
                 <td> { (new Date(u.DataNascita)).toLocaleDateString("it-IT") } </td>
+                <td> { u.Email } </td>
               </tr>
             )
           }
