@@ -21,9 +21,15 @@ routerCliente.post(
 routerCliente.get(
   '/',
   (req, res, next) => {
-    service.getAll(new ClienteFilterModel(req.query))
-      .then(results => res.send(results))
-      .catch(err => next(err));
+    if ('id' in req.query) {
+      service.getDetails(Number(req.query.id))
+        .then(results => res.send(results))
+        .catch(err => next(err));
+    } else {
+      service.getAll(new ClienteFilterModel(req.query))
+        .then(results => res.send(results))
+        .catch(err => next(err));
+    }
   }
 )
 

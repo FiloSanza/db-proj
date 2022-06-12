@@ -1,20 +1,34 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
+import Modal from "react-bootstrap/Modal"
+import Card from "react-bootstrap/Card"
 import NewUtente from "./NewUtente"
 
 import { httpHelper } from "../helpers/httpHelper"
 
 const ClientiController = () => {
 	const [users, setUsers] = useState(null)
-
+  const [show, setShow] = useState(false);
+  const [details, setDetails] = useState({});
+  
 	const url = "http://localhost:8080/api/cliente"
 	const api = httpHelper()
-
+  
 	useEffect(() => {
-		getUsers()
+    getUsers()
 	}, [])
-
-	const postUser = user => {
+  
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    api.get(`${url}?id=${id}`)
+      .then(res => {
+        setDetails(res);
+        setShow(true);
+      })
+      .catch(err => console.log(err));
+  };
+	
+  const postUser = user => {
     console.log(user);
 		api
 			.post(`${url}/register`, { body: user })
@@ -47,8 +61,8 @@ const ClientiController = () => {
         </thead>
         <tbody>
           { users &&
-            users.map(u => 
-              <tr key={u.IdCliente}>
+            users.map(u =>
+              <tr key={u.IdCliente} onClick={e => handleShow(u.IdCliente)}>
                 <td> { u.IdCliente } </td>
                 <td> { u.Nome } </td>
                 <td> { u.Cognome } </td>
@@ -59,7 +73,52 @@ const ClientiController = () => {
           }
         </tbody>
       </Table>
+      <small>Fai click su una riga per vedere i dettagli.</small>
     </div>
+
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Dettaglio Cliente {details.IdCliente}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          <strong>Nome: </strong> {details.nome}
+          <br />
+          <strong>Cognome: </strong> {details.cognome} 
+          <br />
+          <strong>Data di Nascita: </strong> {(new Date(details.dataNascita)).toLocaleDateString("it-IT")}
+          <br />
+          <strong>Email: </strong> {details.email}
+          <br />
+          <br />
+          {
+            details.prenotazioni.length > 0 &&
+            <>
+              <div className="text-center"><h3>Prenotazioni</h3></div>
+              {
+                details.prenotazioni.map(p =>
+                  <Card key={p.idPrenotazione}>
+                    <Card.Header>{(new Date(p.partenza)).toLocaleDateString("it-IT")}</Card.Header>
+                    <Card.Body>
+                      <Card.Title>{p.viaggio}</Card.Title>
+                      <Card.Text>
+                        <strong>Guida: </strong> {p.guida}
+                        <br /> 
+                        <strong>Data Acquisto: </strong> {(new Date(p.dataAcquisto)).toLocaleDateString("it-IT")}
+                        <br />
+                        {p.recensione.valutazione && <><strong>Valutazione: </strong> {p.recensione.valutazione}</>}
+                        <br />
+                        {p.recensione.descrizione && <><strong>Descrizione: </strong> {p.recensione.descrizione}</>}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                )
+              }
+            </>
+          }
+        </div>
+      </Modal.Body>
+    </Modal>
 		</>
 	)
 }
