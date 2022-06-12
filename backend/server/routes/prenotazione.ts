@@ -17,18 +17,20 @@ routerPrenotazione.post(
 })
 
 routerPrenotazione.get(
+  '/details/:email',
+  (req, res, next) => {
+    service.getForCliente(req.params.email)
+      .then(results => res.send(results))
+      .catch(err => next(err));
+  }
+)
+
+routerPrenotazione.get(
   '/',
   (req, res, next) => {
-    if ('email' in req.query) {
-      console.log(req.query)
-      service.getForCliente(req.query.email as string)
-        .then(results => res.send(results))
-        .catch(err => next(err));
-    } else {
-      service.getAll(new PrenotazioneFilterModel(req.query))
-        .then(results => res.send(results))
-        .catch(err => next(err));
-    }
+    service.getAll(new PrenotazioneFilterModel(req.query))
+      .then(results => res.send(results))
+      .catch(err => next(err));
 })
   
 routerPrenotazione.use(errorHandler);
