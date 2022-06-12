@@ -146,7 +146,7 @@ const CreateViaggio = () => {
 
   return (
     <div>
-      { JSON.stringify(data) }
+      {/* { JSON.stringify(data) } */}
       
       <h2>Viaggio</h2>
       <Form>
