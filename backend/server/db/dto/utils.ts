@@ -42,5 +42,5 @@ export let ConvertUtils = {
   toDate: (value: string): Date => new Date(value),
   identity: (value: any): any => value,
   toNumberArray: (value: string[]): number[] => value.map(v => Number(v)),
-  toBoolean: (value: string): boolean => value.toLowerCase() === "true"
+  toBoolean: (value: string): boolean => value.toString().toLowerCase() === "true"
 }

@@ -14,6 +14,7 @@ const AgenziaNavbar = () => {
           <Nav.Link href="/attivita">Attivita</Nav.Link>
           <Nav.Link href="/citta">Citta</Nav.Link>
           <Nav.Link href="/tag">Tag</Nav.Link>
+          <Nav.Link href="/aggiunta">Aggiunta</Nav.Link>
           <NavDropdown title="Viaggi">
             <NavDropdown.Item href="/viaggio">Crea</NavDropdown.Item>
             <NavDropdown.Item href="/listviaggi">Vedi Tutti</NavDropdown.Item>

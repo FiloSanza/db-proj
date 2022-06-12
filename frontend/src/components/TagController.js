@@ -24,9 +24,7 @@ const TagController = () => {
 	const getTags = () => {
 		api
 			.get(`${url}`)
-			.then(res => {
-				setTags(res)
-			})
+			.then(res => setTags(res))
 			.catch(err => console.log(err))
 	}
 
@@ -48,10 +46,10 @@ const TagController = () => {
         </thead>
         <tbody>
           { tags &&
-            tags.map(u => 
-              <tr key={u.IdTag}>
-                <td> { u.IdTag } </td>
-                <td> { u.Descrizione } </td>
+            Array.from(tags).map(t => 
+              <tr key={t.IdTag}>
+                <td> { t.IdTag } </td>
+                <td> { t.Descrizione } </td>
               </tr>
             )
           }

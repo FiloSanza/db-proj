@@ -35,7 +35,6 @@ const NewAttivita = ({ attivitaData = {}, postAttivita, data }) => {
       idTags: tags
     });
     
-    // console.log(attivita);
     postAttivita(attivita);
   }
 
@@ -51,7 +50,7 @@ const NewAttivita = ({ attivitaData = {}, postAttivita, data }) => {
         <Form.Label>
           Durata
         </Form.Label>
-        <Form.Control type="text" placeholder="Durata" name="durata" onChange={handleValue} />
+        <Form.Control type="text" placeholder="Durata(h)" name="durata" onChange={handleValue} />
       </Form.Group>
       <Form.Group>
         <Form.Label>
