@@ -1,5 +1,6 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
 
 const AgenziaNavbar = () => {
@@ -13,9 +14,12 @@ const AgenziaNavbar = () => {
         <Nav.Link href="/attivita">Attivita</Nav.Link>
         <Nav.Link href="/citta">Citta</Nav.Link>
         <Nav.Link href="/tag">Tag</Nav.Link>
-        <Nav.Link href="/viaggio">Viaggio</Nav.Link>
-        <Nav.Link href="/dataviaggio">DataViaggio</Nav.Link>
         <Nav.Link href="/aggiunta">Aggiunta</Nav.Link>
+        <NavDropdown title="Viaggi">
+          <NavDropdown.Item href="/viaggio">Crea</NavDropdown.Item>
+          <NavDropdown.Item href="/listviaggi">Vedi Tutti</NavDropdown.Item>
+        </NavDropdown>
+        <Nav.Link href="/dataviaggio">Date Viaggio</Nav.Link>
       </Nav>
       </Container>
     </Navbar>

@@ -12,6 +12,7 @@ import AttivitaController from "./components/AttivitaController";
 import CittaController from "./components/CittaController";
 import TagController from "./components/TagController";
 import CreateViaggio from "./components/viaggio/CreateViaggio";
+import ListViaggi from "./components/viaggio/ListViaggi"
 import DataViaggioController from "./components/DataViaggioController";
 import AggiuntaController from "./components/AggiuntaController";
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/clienti" element={<ClientiController />} />
             <Route path="/attivita" element={<AttivitaController />} />
             <Route path="/viaggio" element={<CreateViaggio />} />
+            <Route path="/listviaggi" element={<ListViaggi />} />
             <Route path="/dataviaggio" element={<DataViaggioController />} />
             <Route path="/aggiunta" element={<AggiuntaController />} />
           </Routes>
