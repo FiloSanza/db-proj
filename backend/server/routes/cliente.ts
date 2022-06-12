@@ -19,17 +19,20 @@ routerCliente.post(
 )
 
 routerCliente.get(
+  '/details/:id',
+  (req, res, next) => {
+    service.getDetails(Number(req.params.id))
+      .then(results => res.send(results))
+      .catch(err => next(err));
+  }
+)
+
+routerCliente.get(
   '/',
   (req, res, next) => {
-    if ('id' in req.query) {
-      service.getDetails(Number(req.query.id))
-        .then(results => res.send(results))
-        .catch(err => next(err));
-    } else {
-      service.getAll(new ClienteFilterModel(req.query))
-        .then(results => res.send(results))
-        .catch(err => next(err));
-    }
+    service.getAll(new ClienteFilterModel(req.query))
+      .then(results => res.send(results))
+      .catch(err => next(err));
   }
 )
 

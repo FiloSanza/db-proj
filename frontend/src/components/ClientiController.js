@@ -9,7 +9,14 @@ import { httpHelper } from "../helpers/httpHelper"
 const ClientiController = () => {
 	const [users, setUsers] = useState(null)
   const [show, setShow] = useState(false);
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({
+    IdCliente: "",
+    nome: "",
+    cognome: "",
+    dataNascita: "",
+    email: "",
+    prenotazioni: []
+  });
   
 	const url = "http://localhost:8080/api/cliente"
 	const api = httpHelper()
@@ -20,7 +27,7 @@ const ClientiController = () => {
   
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    api.get(`${url}?id=${id}`)
+    api.get(`${url}/details/${id}`)
       .then(res => {
         setDetails(res);
         setShow(true);
