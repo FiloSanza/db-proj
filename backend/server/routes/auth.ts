@@ -15,10 +15,14 @@ loginRouter.post(
   async (req, res) => {
     let email = req.body.email;
     let users = await serviceClienti.getAll(new ClienteFilterModel({Email: email}));
+    console.log(users, email);
     if (users.length === 0) {
       res.status(401).send('Unauthorized');
     } else {
-      res.cookie('cliente', email);
+      res.cookie('cliente', email, {
+        secure: true,
+        sameSite: 'none'
+      });
       res.status(200).send('');
     }
   }
@@ -27,16 +31,19 @@ loginRouter.post(
   loginRouter.post(
     '/loginGuida',
     //TODO: validate,
-async (req, res) => {
-    let email = req.body.email;
-    let users = await serviceGuida.getAll(new GuidaFilterModel({Email: email}));
-    if (users.length === 0) {
-      res.status(401).send('Unauthorized');
-    } else {
-      res.cookie('guida', email);
-      res.status(200).send('');
+    async (req, res) => {
+      let email = req.body.email;
+      let users = await serviceGuida.getAll(new GuidaFilterModel({Email: email}));
+      if (users.length === 0) {
+        res.status(401).send('Unauthorized');
+      } else {
+        res.cookie('guida', email, {
+          secure: true,
+          sameSite: 'none'
+        });
+        res.status(200).send('');
+      }
     }
-  }
 )
 
 loginRouter.post(
