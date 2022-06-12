@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { ClienteFilterModel } from "../dto/cliente";
 import { PrenotazioneCreateModel, PrenotazioneFilterModel } from "../dto/prenotazione";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
@@ -95,6 +96,16 @@ export class PrenotazioneService extends BaseService {
   getAll(filter: PrenotazioneFilterModel) {
     return this._prisma.prenotazione.findMany({
       where: filter.getFilterDict()
+    });
+  }
+
+  getForCliente(email: string) {
+    return this._prisma.prenotazione.findMany({
+      where: {
+        Cliente: {
+          Email: email
+        }
+      }
     });
   }
 }

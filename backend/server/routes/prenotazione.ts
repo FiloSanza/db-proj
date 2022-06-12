@@ -12,16 +12,23 @@ routerPrenotazione.post(
   //TODO: VALIDATE
   (req, res, next) => {
     service.create(PrenotazioneCreateModel.fromDict(req.body))
-    .then(results => res.send(results))
-    .catch(err => next(err));
+      .then(results => res.send(results))
+      .catch(err => next(err));
 })
 
 routerPrenotazione.get(
   '/',
   (req, res, next) => {
-    service.getAll(new PrenotazioneFilterModel(req.query))
-    .then(results => res.send(results))
-    .catch(err => next(err));
+    if ('email' in req.query) {
+      console.log(req.query)
+      service.getForCliente(req.query.email as string)
+        .then(results => res.send(results))
+        .catch(err => next(err));
+    } else {
+      service.getAll(new PrenotazioneFilterModel(req.query))
+        .then(results => res.send(results))
+        .catch(err => next(err));
+    }
 })
   
 routerPrenotazione.use(errorHandler);
