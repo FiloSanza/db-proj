@@ -18,6 +18,7 @@ const AgenziaNavbar = () => {
           <NavDropdown.Item href="/viaggio">Crea</NavDropdown.Item>
           <NavDropdown.Item href="/listviaggi">Vedi Tutti</NavDropdown.Item>
         </NavDropdown>
+        <Nav.Link href="/dataviaggio">Date Viaggio</Nav.Link>
       </Nav>
       </Container>
     </Navbar>

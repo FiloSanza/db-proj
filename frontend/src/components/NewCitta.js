@@ -2,19 +2,19 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button"
 import { React, useState } from "react";
 
-const NewCitta = ({ userData = {}, postUser }) => {
-  const [user, setUser] = useState({
-    descrizione: userData.Descrizione ?? "",
+const NewCitta = ({ cittaData = {}, postCitta }) => {
+  const [citta, setCitta] = useState({
+    descrizione: "",
   })
 
   const handleValue = e => {
-    setUser({ ...user, [e.target.name]: e.target.value })
-    console.log(user)
+    setCitta({ ...citta, [e.target.name]: e.target.value })
+    console.log(citta)
   }
 
   const submitCitta = e => {
     e.preventDefault();
-    postUser(user);
+    postCitta(citta);
   }
 
   return (
