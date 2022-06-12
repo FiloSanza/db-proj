@@ -19,6 +19,15 @@ routerGuida.post(
 )
 
 routerGuida.get(
+  '/details/:id',
+  (req, res, next) => {
+    service.getDetails(Number(req.params.id))
+      .then(results => res.send(results))
+      .catch(err => next(err));
+  }
+)
+
+routerGuida.get(
   '/',
   (req, res, next) => {
     service.getAll(new GuidaFilterModel(req.query))
