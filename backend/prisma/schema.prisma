@@ -37,7 +37,7 @@ model Attivita {
   IdCitta     Int
   Citta       Citta         @relation(fields: [IdCitta], references: [IdCitta], onDelete: NoAction, onUpdate: NoAction, map: "FKlocazione")
   Descrittori Descrittore[]
-  Visite      Visita?
+  Visite      Visita[]
 
   @@index([IdCitta], map: "FKlocazione")
   @@map("ATTIVITA")
