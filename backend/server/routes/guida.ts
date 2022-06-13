@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authorizeGuida } from "../auth/auth";
 import { GuidaCreateModel, GuidaFilterModel } from "../db/dto/guida";
 import { GuidaService } from "../db/services/guida";
 import { guidaRules } from "../validation/guida";
@@ -9,7 +10,8 @@ export const routerGuida = Router();
 const service = new GuidaService();
 
 routerGuida.post(
-  '/register', 
+  '/register',
+  authorizeGuida,
   validator(guidaRules.forRegister), 
   (req, res, next) => {
     service.register(GuidaCreateModel.fromDict(req.body))
@@ -20,6 +22,7 @@ routerGuida.post(
 
 routerGuida.get(
   '/details/:id',
+  authorizeGuida,
   (req, res, next) => {
     service.getDetails(Number(req.params.id))
       .then(results => res.send(results))
@@ -29,6 +32,7 @@ routerGuida.get(
 
 routerGuida.get(
   '/',
+  authorizeGuida,
   (req, res, next) => {
     service.getAll(new GuidaFilterModel(req.query))
       .then(results => res.send(results))

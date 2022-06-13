@@ -99,7 +99,7 @@ const ClientiController = () => {
           <br />
           <br />
           {
-            details.prenotazioni.length > 0 &&
+            (details.prenotazioni && details.prenotazioni.length > 0) &&
             <>
               <div className="text-center"><h3>Prenotazioni</h3></div>
               {
