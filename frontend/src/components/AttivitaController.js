@@ -21,7 +21,7 @@ const AttivitaController = () => {
 
 	const postAttivita = attivita => {
 		api.post(`${url}/create`, { body: attivita })
-			.then(res => getAttivita())
+			.then(res => loadData())
 			.catch(err => console.log(err))
 	}
 

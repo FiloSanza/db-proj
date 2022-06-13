@@ -30,12 +30,7 @@ const NewAttivita = ({ attivitaData = {}, postAttivita, data }) => {
       .filter(c => c.selected)
       .map(c => c.value)
 
-    setAttivita({
-      ...attivita,
-      idTags: tags
-    });
-    
-    postAttivita(attivita);
+    postAttivita({...attivita, idTags: tags});
   }
 
   return (

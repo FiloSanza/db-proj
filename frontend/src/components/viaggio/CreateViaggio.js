@@ -56,7 +56,8 @@ const CreateViaggio = () => {
   }
 
   const updateVisite = (idx, key, value) => {
-    console.log("Update: ", idx, key, value);
+    console.log(idx, key, value);
+    
     data.visite[idx] = {
       ...data.visite[idx],
       [key]: value
@@ -146,7 +147,7 @@ const CreateViaggio = () => {
 
   return (
     <div>
-      {/* { JSON.stringify(data) } */}
+      { JSON.stringify(data) }
       
       <h2>Viaggio</h2>
       <Form>

@@ -9,10 +9,17 @@ const NewGiornata = ({ id, updateGiornata, updateVisite, attivita, upgradeVisita
   })
 
   const addVisita = () => {
-    let id = data.inputVisite.length + 1;
+    let idVisita = data.inputVisite.length + 1;
     let inputVisite = data.inputVisite;
     inputVisite.push((
-      <NewVisita key={id} idx={getVisitaIdx()} id={id} attivita={attivita} upgrade={upgradeVisita} updateVisite={updateVisite} ></NewVisita>
+      <NewVisita 
+        key={idVisita} 
+        idx={getVisitaIdx()} 
+        id={idVisita} 
+        attivita={attivita} 
+        upgrade={upgradeVisita} 
+        updateVisite={updateVisite}
+        numeroGiornata={id} ></NewVisita>
     ))
     setData({
       ...data,

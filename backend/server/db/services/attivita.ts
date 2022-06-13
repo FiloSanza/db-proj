@@ -3,6 +3,7 @@ import { BaseService } from "./base";
 
 export class AttivitaService extends BaseService {
   create(data: AttivitaCreateModel) {
+    console.log(data);
     return this._prisma.$transaction(async prisma => {
       //Creo l'attivita
       let attivita = await this._prisma.attivita.create({
