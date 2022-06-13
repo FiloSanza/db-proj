@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authorizeCliente, authorizeGuida, authorizeUser } from "../auth/auth";
+import { authorizeGuida, authorizeUser } from "../auth/auth";
 import { DataViaggioCreateModel, DataViaggioFilterModel } from "../db/dto/dataviaggio";
 import { DataViaggioService } from "../db/services/dataviaggio";
 import { dataViaggioRules } from "../validation/dataviaggio";
