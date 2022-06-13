@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Tag } from "@prisma/client";
 import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiunta";
 import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggio";
 import { AggiuntaService } from "./aggiunta";
@@ -126,7 +126,15 @@ export class ViaggioService extends BaseService {
           include: {
             Visite: {
               include: {
-                Attivita: true,
+                Attivita: {
+                  include: {
+                    Descrittori: {
+                      include: {
+                        Tag: true
+                      }
+                    }
+                  }
+                },
                 Upgrade: {
                   include: {
                     Aggiunta: true
@@ -158,6 +166,7 @@ export class ViaggioService extends BaseService {
           descrizione: upg.Aggiunta.Descrizione, 
           prezzo: upg.Aggiunta.Prezzo 
         })),
+        tags: this.getUniqueTags(result.Giornate.flatMap(g => g.Visite.flatMap(v => v.Attivita.Descrittori.map(d => d.Tag)))),
         giornate: result.Giornate.map(giornata => ({
           numero: giornata.Numero,
           descrizione: giornata.Descrizione,
@@ -217,4 +226,9 @@ export class ViaggioService extends BaseService {
       }, {})
     );
   }
+
+  getUniqueTags(tags: Tag[]) {
+    return [...new Map(tags.map(t => [t.IdTag, t])).values()]
+  }
+    
 }
