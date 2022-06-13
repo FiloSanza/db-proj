@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table";
 import { httpHelper } from "../../helpers/httpHelper"
 import Form from "react-bootstrap/Form"
+import Modal from "react-bootstrap/Modal"
 
 const ListViaggi = () => {
     const [viaggi, setViaggi] = useState([]);
     const [tags, setTags] = useState([]);
+    const [show, setShow] = useState(false);
+    const [details, setDetails] = useState({});
 
     let search = "";
     let searchTags = [];
@@ -56,6 +59,11 @@ const ListViaggi = () => {
       setViaggi(tmpViaggi);
     }
 
+    const handleClose = () => {};
+    const handleShow = (id) => {
+      //prendi i dettagli del viaggio, serve l'endpoint
+    }
+
     return (
       <>
         <h1>Viaggi</h1>
@@ -89,7 +97,7 @@ const ListViaggi = () => {
            </thead>
            <tbody>
              { viaggi && viaggi.filter(v => v.isVisible).map(v => 
-                <tr key={v.idViaggio}>
+                <tr key={v.idViaggio} onClick={e => handleShow(v.idViaggio)}>
                   <td> {v.idViaggio} </td>
                   <td> {v.descrizione} </td>
                   <td> {v.giornate.length} </td>
@@ -99,6 +107,18 @@ const ListViaggi = () => {
             }
           </tbody>
         </Table>
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Dettaglio Viaggio {details.idViaggio}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              <h4>Descrizione</h4>
+              {details.descrizione}
+            </div>
+          </Modal.Body>
+        </Modal>
       </>
     );
 }
