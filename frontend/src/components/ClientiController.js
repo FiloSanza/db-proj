@@ -15,7 +15,7 @@ const ClientiController = () => {
     cognome: "",
     dataNascita: "",
     email: "",
-    prenotazioni: []
+    viaggi: []
   });
   
 	const url = "http://localhost:8080/api/cliente"
