@@ -59,8 +59,7 @@ const Login = () => {
     e.preventDefault();
 
     api.post(`${urlClienti}`, { 
-      body: { email: email.cliente },
-      credentials: 'include'
+      body: { email: email.cliente }
     })
     .then(res => updateLabel())
     .catch(err => alert(err));
@@ -70,8 +69,7 @@ const Login = () => {
     e.preventDefault();
 
     api.post(`${urlGuida}`, { 
-      body: { email: email.guida },
-      credentials: 'include'
+      body: { email: email.guida }
     })
     .then(res => updateLabel())
     .catch(err => console.log(err));

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authorizeGuida, authorizeUser } from "../auth/auth";
 import { ViaggioCreateModel, ViaggioFilterModel } from "../db/dto/viaggio";
 import { ViaggioService } from "../db/services/viaggio";
 import { validator } from "../validation/utils";
@@ -10,7 +11,8 @@ const service = new ViaggioService();
 
 routerViaggio.post(
   '/create', 
-  validator(viaggioRules.forCreate), 
+  validator(viaggioRules.forCreate),
+  authorizeGuida,
   (req, res, next) => {
     service.create(ViaggioCreateModel.fromDict(req.body))
       .then(results => res.send(results))
@@ -20,6 +22,7 @@ routerViaggio.post(
   
 routerViaggio.get(
   '/',
+  authorizeUser,
   (req, res, next) => {
     service.getAll(new ViaggioFilterModel(req.query))
       .then(results => res.send(results))

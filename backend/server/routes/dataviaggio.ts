@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authorizeCliente, authorizeGuida } from "../auth/auth";
 import { DataViaggioCreateModel, DataViaggioFilterModel } from "../db/dto/dataviaggio";
 import { DataViaggioService } from "../db/services/dataviaggio";
 import { dataViaggioRules } from "../validation/dataviaggio";
@@ -9,7 +10,8 @@ export const routerDataViaggio = Router();
 const service = new DataViaggioService();
 
 routerDataViaggio.post(
-  '/create', 
+  '/create',
+  authorizeGuida,
   validator(dataViaggioRules.forCreate), 
   (req, res, next) => {
     service.create(DataViaggioCreateModel.fromDict(req.body))
@@ -20,6 +22,7 @@ routerDataViaggio.post(
 
 routerDataViaggio.get(
   '/',
+  authorizeCliente,
   (req, res, next) => {
     service.getAll(new DataViaggioFilterModel(req.query))
       .then(results => res.send(results))
