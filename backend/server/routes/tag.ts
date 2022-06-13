@@ -19,6 +19,15 @@ routerTag.post(
 )
 
 routerTag.get(
+  '/details/:id',
+  (req, res, next) => {
+    service.getViaggi(Number(req.params.id))
+      .then(results => res.send(results))
+      .catch(err => next(err));
+  }
+)
+
+routerTag.get(
   '/',
   (req, res, next) => {
     service.getAll(new TagFilterModel(req.query))
