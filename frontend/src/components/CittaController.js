@@ -11,7 +11,7 @@ const CittaController = () => {
 
 	useEffect(() => {
 		getCitta()
-	})
+	}, [])
 
 	const postCitta = citta => {
     console.log(citta);

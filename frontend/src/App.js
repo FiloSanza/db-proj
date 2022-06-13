@@ -16,6 +16,7 @@ import ListViaggi from "./components/viaggio/ListViaggi"
 import DataViaggioController from "./components/DataViaggioController";
 import Login from "./components/Login";
 import AggiuntaController from "./components/AggiuntaController";
+import RecensioneController from "./components/RecensioneController";
 
 const App = () => (
   <div className="App">
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/dataviaggio" element={<DataViaggioController />} />
             <Route path="/login" element={<Login />} />
             <Route path="/aggiunta" element={<AggiuntaController />} />
+            <Route path="/recensione" element={<RecensioneController />} />
           </Routes>
         </div>
       </div>

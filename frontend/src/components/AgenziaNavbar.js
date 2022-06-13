@@ -20,6 +20,7 @@ const AgenziaNavbar = () => {
             <NavDropdown.Item href="/listviaggi">Vedi Tutti</NavDropdown.Item>
           </NavDropdown>
           <Nav.Link href="/dataviaggio">Date Viaggio</Nav.Link>
+          <Nav.Link href="/recensione">Recensione</Nav.Link>
         </Nav>
         <Nav className="justify-content-end">
           <Nav.Link href="/login">Login</Nav.Link>

@@ -17,7 +17,7 @@ const DataViaggioController = () => {
 
 	useEffect(() => {
 		loadData();
-	})
+	}, [])
 
 	const postData = data => {
 		api

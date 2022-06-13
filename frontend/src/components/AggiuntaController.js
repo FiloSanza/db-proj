@@ -11,7 +11,7 @@ const AggiuntaController = () => {
 
 	useEffect(() => {
 		getAggiunta()
-	})
+	}, [])
 
 	const postAggiunta = aggiunta => {
 		api

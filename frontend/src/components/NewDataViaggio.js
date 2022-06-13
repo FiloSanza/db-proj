@@ -41,6 +41,7 @@ const NewDataViaggio = ({ dataviaggioData = {}, postData, data }) => {
 
     delete data["guide"];
     delete data["viaggi"];
+
     postData(data);
   }
 

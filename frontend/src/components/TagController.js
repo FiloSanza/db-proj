@@ -11,7 +11,7 @@ const TagController = () => {
 
 	useEffect(() => {
 		getTags()
-	})
+	}, [])
 
 	const postTag = tag => {
     console.log(tag);
