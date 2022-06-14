@@ -7,8 +7,15 @@ import NewDataViaggio from "./NewDataViaggio"
 const DataViaggioController = () => {
 	const [data, setData] = useState({
     guide: [],
-    viaggi: [],
-    dataViaggio: []
+    viaggi: []
+  })
+  const [dataViaggio, setDataViaggio] = useState([]);
+  const [tableSort, setTableSort] = useState({
+    idDataViaggio: false,
+    dataPartenza: false,
+    posti: false,
+    prezzoBase: false,
+    sconto: false
   })
 
   const urlViaggi = "http://localhost:8080/api/viaggio"
@@ -29,10 +36,7 @@ const DataViaggioController = () => {
 
 	const getDataViaggio = () => {
 		api.get(`${url}`)
-      .then(res => setData({
-        ...data,
-        dataViaggio: res
-      }))
+      .then(res => setDataViaggio(res))
       .catch(err => console.log(err))
 	}
 
@@ -45,8 +49,24 @@ const DataViaggioController = () => {
   const loadData = () => {
     Promise.all([getGuide(), getViaggi(), api.get(`${url}`)])
       .then(res => {
-        setData({guide: res[0], viaggi: res[1],dataViaggio: res[2]});
+        setData({guide: res[0], viaggi: res[1]});
+        setDataViaggio(res[2]);
       });
+  }
+
+  const sortTable = e => {
+    let key = e.target.id;
+    let desc = !tableSort[key];
+    setTableSort({...tableSort, [key]: desc});
+
+    let tmpDataViaggio = dataViaggio.map(d => Object.assign({}, d));
+    tmpDataViaggio.sort((a, b) => {
+      if (a[key] < b[key]) return desc ? -1 : 1;
+      else if (a[key] > b[key]) return desc ? 1 : -1;
+      else return 0;  
+    })
+    
+    setDataViaggio(tmpDataViaggio);
   }
 
 	if (!data) return null
@@ -66,16 +86,16 @@ const DataViaggioController = () => {
       <Table striped>
         <thead>
           <tr>
-              <th> idDataViaggio </th>
-              <th> dataPartenza </th>          
-              <th> posti </th>
-              <th> prezzoBase </th>
-              <th> sconto </th>
+              <th id="idDataViaggio" onClick={sortTable}> idDataViaggio </th>
+              <th id="dataPartenza" onClick={sortTable}> dataPartenza </th>          
+              <th id="posti" onClick={sortTable}> posti </th>
+              <th id="prezzoBase" onClick={sortTable}> prezzoBase </th>
+              <th id="sconto" onClick={sortTable}> sconto </th>
             </tr>
         </thead>
         <tbody>
-          { data.dataViaggio &&
-            Array.from(data.dataViaggio).map(dv => 
+          { dataViaggio &&
+            Array.from(dataViaggio).map(dv => 
               <tr key={dv.idDataViaggio}>
                 <td> { dv.idDataViaggio } </td>
                 <td> { (new Date(dv.dataPartenza)).toLocaleDateString("it-IT") } </td>
@@ -87,6 +107,7 @@ const DataViaggioController = () => {
           }
         </tbody>
       </Table>
+      <small>Clicca sull'header della tabella per ordinare le righe.</small>
     </div>
 		</>
 	)
