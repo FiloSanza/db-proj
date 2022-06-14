@@ -32,7 +32,29 @@ export class RecensioneService extends BaseService {
   
   getAll(filter: RecensioneFilterModel) {
     return this._prisma.recensione.findMany({
-      where: filter.getFilterDict()
+      where: filter.getFilterDict(),
+      include: {
+        Prenotazione: {
+          include: {
+            DataViaggio: {
+              include: {
+                Viaggio: true
+              }
+            }
+          }
+        }
+      }
+    })
+    .then(res => {
+      return res.map(res => ({
+        IdRecensione: res.IdRecensione,
+        IdPrenotazione: res.IdPrenotazione,
+        Valutazione: res.Valutazione,
+        Descrizione: res.Descrizione,
+        DataPubblicazione: res.DataPubblicazione,
+        DescrizioneViaggio: res.Prenotazione.DataViaggio.Viaggio.Descrizione,
+        DataPartenza: res.Prenotazione.DataViaggio.DataPartenza
+      }))
     });
   }
 
