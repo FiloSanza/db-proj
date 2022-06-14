@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { AbstractFilter, ConvertUtils } from "./utils";
 
 export interface IPrenotazioneModel {
-  idCliente: number,
+  email: string,
   idDataViaggio: number,
   dataAcquisto: Date,
   prezzoTotale: number,
@@ -10,20 +10,19 @@ export interface IPrenotazioneModel {
 }
 
 export class PrenotazioneModel implements IPrenotazioneModel {
-  idCliente: number;
+  email: string;
   idDataViaggio: number;
   dataAcquisto: Date;
   prezzoTotale: number;
   aggiunteIds: number[];
   
   protected constructor(
-    idCliente: number,
+    email: string,
     idDataViaggio: number,
     dataAcquisto: Date,
     prezzoTotale: number,
     aggiunteIds: number[]
   ) {
-    this.idCliente = idCliente;
     this.idDataViaggio = idDataViaggio;
     this.dataAcquisto = dataAcquisto;
     this.prezzoTotale = prezzoTotale;
@@ -32,7 +31,7 @@ export class PrenotazioneModel implements IPrenotazioneModel {
 
   public static fromDict(dict: Record<string, any>): PrenotazioneModel {
     return new PrenotazioneModel(
-      Number(dict.idCliente),
+      dict.email,
       Number(dict.idDataViaggio),
       new Date(dict.dataAcquisto),
       Number(dict.prezzoTotale),
