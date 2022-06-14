@@ -46,7 +46,7 @@ const NewRecensione = ({ recensioneData = {}, postRecensione }) => {
     let recensione = {...data};
     delete recensione['prenotazioni'];
     delete recensione['dataViaggio'];
-    recensione['dataPubblicazione'] = new Date().toISOString().slice(0, 10) ;
+    recensione['dataPubblicazione'] = new Date().toISOString().slice(0, 10);
 
     postRecensione(recensione);
   }

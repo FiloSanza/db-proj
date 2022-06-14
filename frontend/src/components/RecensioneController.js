@@ -15,7 +15,6 @@ const RecensioneController = () => {
 	}, [])
 
 	const postRecensione = recensione => {
-    console.log(recensione);
 		api
 			.post(`${url}/create`, { body: recensione })
 			.then(res => getRecensioni())
