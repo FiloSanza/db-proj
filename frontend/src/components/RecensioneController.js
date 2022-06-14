@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import Table from "react-bootstrap/Table"
+import Card from "react-bootstrap/Card"
 import { httpHelper } from "../helpers/httpHelper"
 import NewRecensione from "./NewRecensione"
 
@@ -39,26 +39,36 @@ const RecensioneController = () => {
     />
     <div className='all-users'>
       <h3>Recensioni</h3>
-      <Table striped>
-        <thead>
-          <tr>
-            {(recensioni && recensioni.length > 0) && Object.keys(recensioni[0]).map(k => <th key={k}>{ k }</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          { recensioni &&
-            Array.from(recensioni).map(r => 
-              <tr key={r.IdRecensione}>
-                <td> { r.IdRecensione } </td> 
-                <td> { r.IdPrenotazione } </td>
-                <td> { r.Valutazione } </td>
-                <td> { r.Descrizione } </td>
-                <td> { (new Date(r.DataPubblicazione)).toLocaleDateString("it-IT") } </td>
-              </tr>
-            )
-          }
-        </tbody>
-      </Table>
+      <div>
+        {
+          recensioni.length > 0 &&
+          <>
+            {
+              recensioni.map(r =>
+                <Card key={r.IdRecensione}>
+                  <Card.Body>
+                    <Card.Title>Recensione {r.IdRecensione}</Card.Title>
+                    <Card.Text>
+                      <strong>Id: </strong> {r.IdRecensione}
+                      <br />
+                      <strong>Descrizione: </strong> {r.Descrizione}
+                      <br />
+                      <strong>Valutazione: </strong> {r.Valutazione}
+                      <br />
+                      <strong>DataPubblicazione: </strong> {(new Date(r.DataPubblicazione)).toLocaleDateString("it-IT")}
+                      <br />
+                      <strong>DescrizioneViaggio: </strong> {r.DescrizioneViaggio}
+                      <br />
+                      <strong>DataPartenza: </strong> {(new Date(r.DataPartenza)).toLocaleDateString("it-IT")}
+                      <br />
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              )
+            }
+          </>
+        }
+      </div>
     </div>
 		</>
 	)
