@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { ClienteFilterModel } from "../dto/cliente";
 import { PrenotazioneCreateModel, PrenotazioneFilterModel } from "../dto/prenotazione";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
@@ -49,7 +48,9 @@ export class PrenotazioneService extends BaseService {
       //Controllo che Cliente non sia in viaggio in quel periodo
       let prenotazioniCliente = await prisma.prenotazione.findMany({
         where: {
-          IdCliente: data.idCliente
+          Cliente: {
+            Email: data.email
+          }
         },
         select: {
           IdDataViaggio: true
@@ -72,7 +73,7 @@ export class PrenotazioneService extends BaseService {
           DataAcquisto: data.dataAcquisto,
           PrezzoTotale: prezzo,
           Cliente: {
-            connect: { IdCliente: data.idCliente }
+            connect: { Email: data.email }
           },
           DataViaggio: {
             connect: { IdDataViaggio: data.idDataViaggio}
