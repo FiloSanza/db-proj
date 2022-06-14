@@ -30,4 +30,14 @@ routerViaggio.get(
   }
 )
 
+routerViaggio.get(
+  '/upgrades/:id',
+  authorizeGuida,
+  (req, res, next) => {
+    service.getAllUpgrades(Number(req.params.id))
+      .then(results => res.send(results))
+      .catch(err => next(err));
+  }
+)
+
 routerViaggio.use(errorHandler);

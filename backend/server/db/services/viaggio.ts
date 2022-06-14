@@ -185,7 +185,7 @@ export class ViaggioService extends BaseService {
     })
   }
 
-  getAllUpgrades(id: number): Promise<Record<string, number>> {
+  countAllUpgrades(id: number): Promise<Record<string, number>> {
     return this._prisma.viaggio.findUnique({
       where: {
         IdViaggio: id
@@ -206,7 +206,8 @@ export class ViaggioService extends BaseService {
         },
         Upgrade: {
           select: {
-            Aggiunta: true
+            Aggiunta: true,
+            
           }
         },
       }
@@ -225,6 +226,44 @@ export class ViaggioService extends BaseService {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc;
       }, {})
     );
+  }
+
+  getAllUpgrades(id: number) {
+    return this._prisma.viaggio.findUnique({
+      where: {
+        IdViaggio: id
+      },
+      include: {
+        Giornate: {
+          include: {
+            Visite: {
+              include: {
+                Upgrade: {
+                  select: {
+                    Aggiunta: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        Upgrade: {
+          select: {
+            Aggiunta: true,
+            
+          }
+        },
+      }
+    })
+    //Take only IdAggiunta
+    .then(result => {
+      return result.Upgrade.map(u => u.Aggiunta)
+          .concat(
+            result.Giornate.flatMap(
+              g => g.Visite.flatMap(
+                v => v.Upgrade.flatMap(
+                  u => u.Aggiunta))));
+    });
   }
 
   getUniqueTags(tags: Tag[]) {

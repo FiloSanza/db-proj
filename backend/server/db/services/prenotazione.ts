@@ -6,7 +6,9 @@ import { DataViaggioService } from "./dataviaggio";
 import { ViaggioService } from "./viaggio";
 
 export class PrenotazioneService extends BaseService {
+  
   create(data: PrenotazioneCreateModel) {
+    console.log(data);
     return this._prisma.$transaction(async prisma => {
       //Controllo che ci siano posti
       let dataViaggioService = new DataViaggioService(prisma as PrismaClient);
@@ -33,7 +35,7 @@ export class PrenotazioneService extends BaseService {
       }
 
       let aggiunteViaggio = 
-        await viaggioService.getAllUpgrades(dataViaggio.Viaggio.IdViaggio);
+        await viaggioService.countAllUpgrades(dataViaggio.Viaggio.IdViaggio);
       let valid = data.aggiunteIds.every(id => id in aggiunteViaggio);
       if (!valid) {
         throw new Error("Id Aggiunte non valido");
@@ -73,7 +75,9 @@ export class PrenotazioneService extends BaseService {
           DataAcquisto: data.dataAcquisto,
           PrezzoTotale: prezzo,
           Cliente: {
-            connect: { Email: data.email }
+            connect: {
+              Email: data.email
+            }
           },
           DataViaggio: {
             connect: { IdDataViaggio: data.idDataViaggio}

@@ -23,6 +23,7 @@ export class PrenotazioneModel implements IPrenotazioneModel {
     prezzoTotale: number,
     aggiunteIds: number[]
   ) {
+    this.email = email;
     this.idDataViaggio = idDataViaggio;
     this.dataAcquisto = dataAcquisto;
     this.prezzoTotale = prezzoTotale;

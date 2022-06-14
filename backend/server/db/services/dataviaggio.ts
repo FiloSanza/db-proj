@@ -39,7 +39,8 @@ export class DataViaggioService extends BaseService {
     })
     .then(results => {
       return results.map(result => ({
-        idDataViaggio: result.IdDataViaggio,
+        idDataViaggio: result.IdDataViaggio,  
+        idViaggio: result.IdViaggio,
         descrizione: result.Viaggio.Descrizione,
         dataPartenza: result.DataPartenza,
         posti: result.Posti,
