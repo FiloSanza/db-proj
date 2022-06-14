@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal"
 import Card from "react-bootstrap/Card"
 import NewTag from "./NewTag"
 import { httpHelper } from "../../helpers/httpHelper"
+import { isGuidaLogged, isUserLogged } from "../../helpers/auth"
 
 const TagController = () => {
 	const [tags, setTags] = useState(null);
@@ -47,13 +48,17 @@ const TagController = () => {
   };
 
 	if (!tags) return null
+  if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>;
 
 	return (
 		<>
-    <h3>Nuovo Tag</h3>
-    <NewTag 
-      postTag={postTag}
-    />
+    {
+      isGuidaLogged() &&
+      <>
+        <h3>Nuovo Tag</h3>
+        <NewTag postTag={postTag} />
+      </>
+    }
     <div className='all-users'>
       <h3>Tag</h3>
       <Table striped>

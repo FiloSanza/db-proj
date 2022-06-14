@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Card from "react-bootstrap/Card"
 import { httpHelper } from "../../helpers/httpHelper"
+import { isUserLogged, isClienteLogged } from "../../helpers/auth"
 import NewRecensione from "./NewRecensione"
 
 const RecensioneController = () => {
@@ -29,13 +30,17 @@ const RecensioneController = () => {
 	}
 
 	if (!recensioni) return null
+  if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>
 
 	return (
 		<>
-    <h3>Nuova Recensione</h3>
-    <NewRecensione 
-      postRecensione={postRecensione}
-    />
+    {
+      isClienteLogged() &&
+      <>
+        <h3>Nuova Recensione</h3>
+        <NewRecensione postRecensione={postRecensione}/>
+      </>
+    }
     <div className='all-users'>
       <h3>Recensioni</h3>
       <div>

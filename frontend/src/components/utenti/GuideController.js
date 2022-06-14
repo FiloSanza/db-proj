@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table"
 import Modal from "react-bootstrap/Modal"
 import Card from "react-bootstrap/Card"
 import NewUtente from "./NewUtente"
+import { isGuidaLogged } from "../../helpers/auth"
 
 import { httpHelper } from "../../helpers/httpHelper"
 
@@ -53,6 +54,7 @@ const GuideController = () => {
 	}
 
 	if (!users) return null
+  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visuallizare la pagina.</strong>
 
 	return (
 		<>

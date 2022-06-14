@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
 import { httpHelper } from "../../helpers/httpHelper"
+import { isUserLogged, isGuidaLogged } from "../../helpers/auth"
 import NewDataViaggio from "./NewDataViaggio"
 
 const DataViaggioController = () => {
@@ -49,14 +50,17 @@ const DataViaggioController = () => {
   }
 
 	if (!data) return null
+  if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>
 
 	return (
 		<>
-    <h3>Nuova Data Viaggio</h3>
-    <NewDataViaggio
-      postData={postData}
-      data={data}
-    />
+    {
+      isGuidaLogged() &&
+      <>
+        <h3>Nuova Data Viaggio</h3>
+       <NewDataViaggio postData={postData} data={data} />
+      </>
+    }
     <div className='all-users'>
       <h3>Data Viaggio</h3>
       <Table striped>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
 import { httpHelper } from "../../helpers/httpHelper"
+import { isGuidaLogged } from "../../helpers/auth"
 import NewPrenotazione from "./NewPrenotazione"
 
 const PrenotazioneController = () => {
@@ -29,6 +30,7 @@ const PrenotazioneController = () => {
 	}
 
 	if (!prenotazioni) return null
+  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visuallizare la pagina.</strong>
 
 	return (
       <>

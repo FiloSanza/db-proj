@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table";
 import NewAttivita from "./NewAttivita";
 import { httpHelper } from "../../helpers/httpHelper"
+import { isGuidaLogged, isUserLogged } from "../../helpers/auth"
 
 const AttivitaController = () => {
 	const [data, setData] = useState({
@@ -40,13 +41,16 @@ const AttivitaController = () => {
 	}
 
 	if (!data.attivita) return null
+  if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>
 
 	return (
 		<>
-      <h3>Nuova Attivita</h3>
-      <NewAttivita data={data}
-        postAttivita={postAttivita}
-      />
+      { isGuidaLogged() &&
+        <>
+          <h3>Nuova Attivita</h3>
+          <NewAttivita data={data} postAttivita={postAttivita} />
+        </>
+      }
       <div className='all-users'>
         <h3>Attivita</h3>
         <Table striped>

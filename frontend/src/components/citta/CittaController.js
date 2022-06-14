@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
 import { httpHelper } from "../../helpers/httpHelper"
 import NewCitta from "./NewCitta"
+import { isClienteLogged, isGuidaLogged, isUserLogged } from "../../helpers/auth"
 
 const CittaController = () => {
 	const [citta, setCitta] = useState(null)
@@ -29,13 +30,17 @@ const CittaController = () => {
 	}
 
 	if (!citta) return null
+  if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>
 
 	return (
 		<>
-    <h3>Nuova Citta</h3>
-    <NewCitta 
-      postCitta={postCitta}
-    />
+    {
+      isGuidaLogged() &&
+      <>
+        <h3>Nuova Citta</h3>
+        <NewCitta postCitta={postCitta} />
+      </>
+    }
     <div className='all-users'>
       <h3>Citta</h3>
       <Table striped>

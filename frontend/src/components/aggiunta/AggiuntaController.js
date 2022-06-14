@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
 import { httpHelper } from "../../helpers/httpHelper"
+import { isUserLogged, isGuidaLogged } from "../../helpers/auth"
 import NewAggiunta from "./NewAggiunta"
 
 const AggiuntaController = () => {
@@ -29,35 +30,39 @@ const AggiuntaController = () => {
 
 	if (!aggiunta) return null
 
+  if (!isUserLogged()) return (<strong> Devi fare il login prima di accedere alla pagina </strong>);
+
 	return (
 		<>
-        <h3>Nuova Aggiunta</h3>
-        <NewAggiunta 
-            postAggiunta={postAggiunta}
-        />
-        <div className='all-users'>
+      { isGuidaLogged() &&
+        <>
+          <h3>Nuova Aggiunta</h3>
+          <NewAggiunta postAggiunta={postAggiunta} />
+        </>
+      }
+      <div className='all-users'>
         <h3>Aggiunta</h3>
         <Table striped>
-            <thead>
-            <tr>
-                {(aggiunta && aggiunta.length > 0) && Object.keys(aggiunta[0]).map(k => <th key={k}>{ k }</th>)}
-            </tr>
-            </thead>
-            <tbody>
-            { aggiunta &&
-                Array.from(aggiunta).map(a => 
-                <tr key={ a.IdAggiunta }>
-                    <td> { a.IdAggiunta } </td>
-                    <td> { a.Descrizione } </td>
-                    <td> { a.Prezzo } </td>
-                    <td> { a.AggiuntaVisita.toString() } </td>
-                </tr>
-                )
-            }
-            </tbody>
+          <thead>
+          <tr>
+            {(aggiunta && aggiunta.length > 0) && Object.keys(aggiunta[0]).map(k => <th key={k}>{ k }</th>)}
+          </tr>
+          </thead>
+          <tbody>
+          { aggiunta &&
+            Array.from(aggiunta).map(a => 
+              <tr key={ a.IdAggiunta }>
+                <td> { a.IdAggiunta } </td>
+                <td> { a.Descrizione } </td>
+                <td> { a.Prezzo } </td>
+                <td> { a.AggiuntaVisita.toString() } </td>
+              </tr>
+            )
+          }
+          </tbody>
         </Table>
-        </div>
-        </>
+      </div>
+    </>
 	)
 }
 

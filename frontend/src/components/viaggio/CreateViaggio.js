@@ -3,6 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import { httpHelper } from "../../helpers/httpHelper"
 import NewGiornata from "./NewGiornata";
+import { isGuidaLogged } from "../../helpers/auth"
 
 const CreateViaggio = () => {
   const [data, setData] = useState({
@@ -145,9 +146,11 @@ const CreateViaggio = () => {
     return visite.length-1;
   };
 
+  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di poter aggiungere un viaggio.</strong>
+
   return (
     <div>
-      { JSON.stringify(data) }
+      {/* { JSON.stringify(data) } */}
       
       <h2>Viaggio</h2>
       <Form>

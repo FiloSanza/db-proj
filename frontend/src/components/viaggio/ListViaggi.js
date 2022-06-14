@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form"
 import Modal from "react-bootstrap/Modal"
 import ListGroup from "react-bootstrap/ListGroup"
 import Card from "react-bootstrap/Card"
+import { isUserLogged } from "../../helpers/auth";
 
 const ListViaggi = () => {
     const [viaggi, setViaggi] = useState([]);
@@ -99,6 +100,8 @@ const ListViaggi = () => {
       setViaggi(tmpViaggi);
     }
 
+    if (!isUserLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>;
+
     return (
       <>
         <h1>Viaggi</h1>
@@ -144,6 +147,7 @@ const ListViaggi = () => {
             }
           </tbody>
         </Table>
+        <small>Clicca su una riga per vedere i dettagli e sull'header della tabella per ordinare le righe.</small>
 
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
@@ -178,10 +182,11 @@ const ListViaggi = () => {
                         <Card.Body>
                           <Card.Text>
                             <strong>Valutazione: </strong> {r.Valutazione}
+                            <br />
                             { r.Descrizione && 
                               <>
-                                <br />
                                 <strong>Descrizione: </strong> {r.Descrizione} 
+                                <br />
                               </>
                             }
                             <strong>Guida: </strong> {r.guida}
