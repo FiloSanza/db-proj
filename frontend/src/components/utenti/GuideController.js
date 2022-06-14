@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal"
 import Card from "react-bootstrap/Card"
 import NewUtente from "./NewUtente"
 
-import { httpHelper } from "../helpers/httpHelper"
+import { httpHelper } from "../../helpers/httpHelper"
 
 const GuideController = () => {
 	const [users, setUsers] = useState(null)

@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button"
-import { httpHelper } from "../helpers/httpHelper"
+import { httpHelper } from "../../helpers/httpHelper"
 import { React, useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 

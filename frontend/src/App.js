@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import ClientiController from "./components/ClientiController";
-import GuideController from "./components/GuideController";
+import ClientiController from "./components/utenti/ClientiController";
+import GuideController from "./components/utenti/GuideController";
 import './styles/App.css';
 import {
     BrowserRouter,
@@ -8,16 +8,16 @@ import {
     Routes
 } from "react-router-dom";
 import AgenziaNavbar from "./components/AgenziaNavbar";
-import AttivitaController from "./components/AttivitaController";
-import CittaController from "./components/CittaController";
-import TagController from "./components/TagController";
+import AttivitaController from "./components/attivita/AttivitaController";
+import CittaController from "./components/citta/CittaController";
+import TagController from "./components/tag/TagController";
 import CreateViaggio from "./components/viaggio/CreateViaggio";
 import ListViaggi from "./components/viaggio/ListViaggi"
-import DataViaggioController from "./components/DataViaggioController";
+import DataViaggioController from "./components/dataViaggio/DataViaggioController";
 import Login from "./components/Login";
-import AggiuntaController from "./components/AggiuntaController";
-import RecensioneController from "./components/RecensioneController";
-import PrenotazioneController from "./components/PrenotazioneController";
+import AggiuntaController from "./components/aggiunta/AggiuntaController";
+import RecensioneController from "./components/recensione/RecensioneController";
+import PrenotazioneController from "./components/prenotazione/PrenotazioneController";
 
 const App = () => (
   <div className="App">

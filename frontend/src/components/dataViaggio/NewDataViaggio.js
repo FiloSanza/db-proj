@@ -1,7 +1,7 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button"
 import { React, useState, useEffect } from "react";
-import { httpHelper } from "../helpers/httpHelper";
+import { httpHelper } from "../../helpers/httpHelper";
 
 const NewDataViaggio = ({ dataviaggioData = {}, postData, data }) => {
   const [dataViaggio, setDataViaggio] = useState({

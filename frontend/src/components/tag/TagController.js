@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table"
 import Modal from "react-bootstrap/Modal"
 import Card from "react-bootstrap/Card"
 import NewTag from "./NewTag"
-import { httpHelper } from "../helpers/httpHelper"
+import { httpHelper } from "../../helpers/httpHelper"
 
 const TagController = () => {
 	const [tags, setTags] = useState(null);

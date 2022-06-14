@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table";
 import NewAttivita from "./NewAttivita";
-import { httpHelper } from "../helpers/httpHelper"
+import { httpHelper } from "../../helpers/httpHelper"
 
 const AttivitaController = () => {
 	const [data, setData] = useState({
