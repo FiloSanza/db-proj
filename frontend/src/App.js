@@ -17,6 +17,7 @@ import DataViaggioController from "./components/DataViaggioController";
 import Login from "./components/Login";
 import AggiuntaController from "./components/AggiuntaController";
 import RecensioneController from "./components/RecensioneController";
+import PrenotazioneController from "./components/PrenotazioneController";
 
 const App = () => (
   <div className="App">
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/aggiunta" element={<AggiuntaController />} />
             <Route path="/recensione" element={<RecensioneController />} />
+            <Route path="/prenotazione" element={<PrenotazioneController />} />
           </Routes>
         </div>
       </div>
