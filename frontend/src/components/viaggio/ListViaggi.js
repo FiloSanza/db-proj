@@ -15,7 +15,8 @@ const ListViaggi = () => {
       periodo: {},
       tags: [],
       aggiunte: [],
-      recensioni: []
+      recensioni: [],
+      giornate: []
     });
     const [tableSort, setTableSort] = useState({
       idViaggio: false,
@@ -169,8 +170,34 @@ const ListViaggi = () => {
               </ListGroup>
               <br />
               <br />
+              { 
+                details.giornate.map(g =>
+                  <Card key={g.numero}>
+                    <Card.Header>Giornata {g.numero}</Card.Header>
+                    <Card.Body>
+                      <Card.Text>
+                        <ListGroup variant="flush">
+                        {
+                          g.visite.map(v => 
+                            <ListGroup.Item key={v.idVisita}>
+                              Descrizione: {v.descrizioneAttivita}
+                              <br />
+                              Durata: {v.durata}
+                              <br />
+                              Ora: {v.ora}
+                            </ListGroup.Item>
+                          )
+                        }
+                        </ListGroup>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                )
+              }
               { details.recensioni.length > 0 &&
                 <> 
+                  <br />
+                  <br />
                   <h4>Recensioni</h4>
                   <strong>Valutazione: </strong> {details.valutazione}
                   <br />
