@@ -3,12 +3,26 @@ import Table from "react-bootstrap/Table";
 import { httpHelper } from "../../helpers/httpHelper"
 import Form from "react-bootstrap/Form"
 import Modal from "react-bootstrap/Modal"
+import ListGroup from "react-bootstrap/ListGroup"
+import Card from "react-bootstrap/Card"
 
 const ListViaggi = () => {
     const [viaggi, setViaggi] = useState([]);
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
-    const [details, setDetails] = useState({});
+    const [details, setDetails] = useState({
+      periodo: {},
+      tags: [],
+      aggiunte: [],
+      recensioni: []
+    });
+    const [tableSort, setTableSort] = useState({
+      idViaggio: false,
+      descrizione: false,
+      giornate: false,
+      periodo: false,
+      valutazione: false
+    })
 
     let search = "";
     let searchTags = [];
@@ -59,9 +73,30 @@ const ListViaggi = () => {
       setViaggi(tmpViaggi);
     }
 
-    const handleClose = () => {};
+    const handleClose = () => setShow(false);
     const handleShow = (id) => {
-      //prendi i dettagli del viaggio, serve l'endpoint
+      api.get(`${url}/details/${id}`)
+      .then(res => {
+        setDetails(res);
+        setShow(true);
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+    }
+
+    const sortTable = e => {
+      let key = e.target.id;
+      let desc = !tableSort[key];
+      setTableSort({...tableSort, [key]: desc});
+
+      let tmpViaggi = viaggi.map(v => Object.assign({}, v));
+      tmpViaggi.sort((a, b) => {
+        if (a[key] < b[key]) return desc ? -1 : 1;
+        else if (a[key] > b[key]) return desc ? 1 : -1;
+        else return 0;
+      });
+
+      setViaggi(tmpViaggi);
     }
 
     return (
@@ -89,10 +124,11 @@ const ListViaggi = () => {
         <Table striped>
            <thead>
              <tr>
-               <th> IdViaggio </th>
-               <th> Descrizione </th>
-               <th> Giornate </th>
+               <th id="idViaggio" onClick={sortTable}> IdViaggio </th>
+               <th id="descrizione" onClick={sortTable}> Descrizione </th>
+               <th id="giornate" onClick={sortTable}> Giornate </th>
                <th> Periodo </th>
+               <th id="valutazione" onClick={sortTable}> Valutazione </th> 
              </tr>
            </thead>
            <tbody>
@@ -102,6 +138,7 @@ const ListViaggi = () => {
                   <td> {v.descrizione} </td>
                   <td> {v.giornate.length} </td>
                   <td> {v.periodo.giornoInizio}/{v.periodo.meseInizio} - {v.periodo.giornoFine}/{v.periodo.meseFine} </td>
+                  <td> {v.valutazione} </td>
                 </tr>
               )
             }
@@ -116,6 +153,47 @@ const ListViaggi = () => {
             <div>
               <h4>Descrizione</h4>
               {details.descrizione}
+              <br />
+              <strong>Periodo: </strong> {details.periodo.giornoInizio}/{details.periodo.meseInizio} - {details.periodo.giornoFine}/{details.periodo.meseFine}
+              <br />
+              <strong>Tags: </strong> {details.tags.map(t => t.Descrizione).join(", ")}
+              <br />
+              <br />
+              <h4>Aggiunte Disponibili</h4>
+              <ListGroup variant="flush">
+                { details.aggiunte.map(a => <ListGroup.Item key={a.idAggiunta}>{a.descrizione} - {a.prezzo}€</ListGroup.Item>) }
+              </ListGroup>
+              <br />
+              <br />
+              { details.recensioni.length > 0 &&
+                <> 
+                  <h4>Recensioni</h4>
+                  <strong>Valutazione: </strong> {details.valutazione}
+                  <br />
+                  <br />
+                  {
+                    details.recensioni.map(r => (
+                      <Card key={r.IdRecensione}>
+                        <Card.Header>{r.cliente} - {(new Date(r.DataPubblicazione)).toLocaleDateString("it-IT")}</Card.Header>
+                        <Card.Body>
+                          <Card.Text>
+                            <strong>Valutazione: </strong> {r.Valutazione}
+                            { r.Descrizione && 
+                              <>
+                                <br />
+                                <strong>Descrizione: </strong> {r.Descrizione} 
+                              </>
+                            }
+                            <strong>Guida: </strong> {r.guida}
+                            <br /> 
+                            <strong>Data Partenza: </strong> {(new Date(r.dataPartenza)).toLocaleDateString("it-IT")}
+                          </Card.Text>
+                        </Card.Body>
+                      </Card>
+                    ))
+                  }
+                </>
+              }
             </div>
           </Modal.Body>
         </Modal>

@@ -40,4 +40,14 @@ routerViaggio.get(
   }
 )
 
+routerViaggio.get(
+  '/details/:id',
+  authorizeGuida,
+  (req, res, next) => {
+    service.getDetails(Number(req.params.id))
+      .then(result => res.send(result))
+      .catch(err => next(err));
+  }
+)
+
 routerViaggio.use(errorHandler);

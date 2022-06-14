@@ -1,4 +1,4 @@
-import { PrismaClient, Tag } from "@prisma/client";
+import { PrismaClient, Recensione, Tag } from "@prisma/client";
 import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiunta";
 import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggio";
 import { AggiuntaService } from "./aggiunta";
@@ -122,6 +122,15 @@ export class ViaggioService extends BaseService {
     return this._prisma.viaggio.findMany({
       where: filter.getFilterDict(),
       include: {
+        Date: {
+          include: {
+            Prenotazioni: {
+              include: {
+                Recensione: true
+              }
+            }
+          }
+        },
         Giornate: {
           include: {
             Visite: {
@@ -163,10 +172,12 @@ export class ViaggioService extends BaseService {
           meseFine: result.Periodo.MeseFine
         },
         aggiunte: result.Upgrade.map(upg => ({ 
+          idAggiunta: upg.IdAggiunta,
           descrizione: upg.Aggiunta.Descrizione, 
           prezzo: upg.Aggiunta.Prezzo 
         })),
-        tags: this.getUniqueTags(result.Giornate.flatMap(g => g.Visite.flatMap(v => v.Attivita.Descrittori.map(d => d.Tag)))),
+        valutazione: this._getValutazioneMedia(result.Date.flatMap(d => d.Prenotazioni.map(p => p.Recensione).filter(p => p))),
+        tags: this._getUniqueTags(result.Giornate.flatMap(g => g.Visite.flatMap(v => v.Attivita.Descrittori.map(d => d.Tag)))),
         giornate: result.Giornate.map(giornata => ({
           numero: giornata.Numero,
           descrizione: giornata.Descrizione,
@@ -183,6 +194,92 @@ export class ViaggioService extends BaseService {
         }))
       }));
     })
+  }
+
+  getDetails(id: number) {
+    return this._prisma.viaggio.findUnique({
+      where: {
+        IdViaggio: id
+      },
+      include: {
+        Date: {
+          include: {
+            Guida: true,
+            Prenotazioni: {
+              include: {
+                Recensione: true,
+                Cliente: true
+              }
+            }
+          }
+        },
+        Giornate: {
+          include: {
+            Visite: {
+              include: {
+                Attivita: {
+                  include: {
+                    Descrittori: {
+                      include: {
+                        Tag: true
+                      }
+                    }
+                  }
+                },
+                Upgrade: {
+                  include: {
+                    Aggiunta: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        Upgrade: {
+          include: {
+            Aggiunta: true
+          }
+        },
+        Periodo: true
+      }
+    })
+    .then(result => ({
+        idViaggio: result.IdViaggio,
+        descrizione: result.Descrizione,
+        periodo: {
+          giornoInizio: result.Periodo.GiornoInizio,
+          giornoFine: result.Periodo.GiornoFine,
+          meseInizio: result.Periodo.MeseInizio,
+          meseFine: result.Periodo.MeseFine
+        },
+        aggiunte: result.Upgrade.map(upg => ({
+          idAggiunta: upg.IdAggiunta,
+          descrizione: upg.Aggiunta.Descrizione, 
+          prezzo: upg.Aggiunta.Prezzo 
+        })),
+        valutazione: this._getValutazioneMedia(result.Date.flatMap(d => d.Prenotazioni.map(p => p.Recensione).filter(p => p))),
+        recensioni: result.Date.flatMap(d => d.Prenotazioni.filter(p => p.Recensione).map(p => ({
+          ...p.Recensione,
+          guida: d.Guida.Email,
+          dataPartenza: d.DataPartenza,
+          cliente: p.Cliente.Email
+        }))),
+        tags: this._getUniqueTags(result.Giornate.flatMap(g => g.Visite.flatMap(v => v.Attivita.Descrittori.map(d => d.Tag)))),
+        giornate: result.Giornate.map(giornata => ({
+          numero: giornata.Numero,
+          descrizione: giornata.Descrizione,
+          visite: giornata.Visite.map(visita => ({
+            idVisita: visita.IdVisita,
+            ora: visita.Ora,
+            descrizioneAttivita: visita.Attivita.Descrizione,
+            durata: visita.Attivita.Durata,
+            aggiunte: visita.Upgrade.map(upg => ({ 
+              descrizione: upg.Aggiunta.Descrizione,
+              prezzo: upg.Aggiunta.Prezzo
+            }))
+          }))
+        }))
+    }))
   }
 
   countAllUpgrades(id: number): Promise<Record<string, number>> {
@@ -207,7 +304,6 @@ export class ViaggioService extends BaseService {
         Upgrade: {
           select: {
             Aggiunta: true,
-            
           }
         },
       }
@@ -266,8 +362,12 @@ export class ViaggioService extends BaseService {
     });
   }
 
-  getUniqueTags(tags: Tag[]) {
+  _getUniqueTags(tags: Tag[]) {
     return [...new Map(tags.map(t => [t.IdTag, t])).values()]
   }
-    
+
+  _getValutazioneMedia(recensioni: Recensione[]) {
+    let sum = recensioni.map(r => r.Valutazione).reduce((a, b) => a + b, 0);
+    return (sum / recensioni.length) || 0;
+  }
 }
