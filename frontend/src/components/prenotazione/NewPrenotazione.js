@@ -39,8 +39,8 @@ const NewPrenotazione = ({ prenotazioneData = {}, postPrenotazione }) => {
 
   const getAggiuntaViaggio = (id) => 
     api.get(`${urlViaggio}/upgrades/${id}`)
- 
-  const submitPrenotazione = e => {
+
+    const submitPrenotazione = e => {
     e.preventDefault();
 
     let data = {...prenotazione};
