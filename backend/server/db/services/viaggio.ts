@@ -346,12 +346,10 @@ export class ViaggioService extends BaseService {
         Upgrade: {
           select: {
             Aggiunta: true,
-            
           }
         },
       }
     })
-    //Take only IdAggiunta
     .then(result => {
       return this._getUniqueAggiunte(result.Upgrade.map(u => u.Aggiunta)
       .concat(

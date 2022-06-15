@@ -10,6 +10,7 @@ import { routerPrenotazione } from "./prenotazione";
 import { routerRecensione } from "./recensione";
 import { routerTag } from "./tag";
 import { routerViaggio } from "./viaggio";
+import { routerStats } from "./stats";
 
 export const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/viaggio', routerViaggio);
 router.use('/cliente', routerCliente);
 router.use('/guida', routerGuida);
 router.use('/citta', routerCitta);
+router.use('/stats', routerStats);
 router.use('/auth', loginRouter);
 router.use('/tag', routerTag);

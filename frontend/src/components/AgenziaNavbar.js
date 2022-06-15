@@ -22,6 +22,7 @@ const AgenziaNavbar = () => {
           <Nav.Link href="/dataviaggio">Date Viaggio</Nav.Link>
           <Nav.Link href="/prenotazione">Prenotazione</Nav.Link>
           <Nav.Link href="/recensione">Recensione</Nav.Link>
+          <Nav.Link href="/stats">Statistiche</Nav.Link>
         </Nav>
         <Nav className="justify-content-end">
           <Nav.Link href="/login">Login</Nav.Link>
