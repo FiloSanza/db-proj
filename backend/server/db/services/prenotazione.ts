@@ -113,4 +113,26 @@ export class PrenotazioneService extends BaseService {
       }
     });
   }
+
+  getSpesaMediaPerCliente() {
+    return this._prisma.prenotazione.groupBy({
+      by: ["IdCliente"],
+      _sum: {
+        PrezzoTotale: true,
+      }
+    })
+  }
+
+  getForViaggio(idViaggio: number) {
+    return this._prisma.prenotazione.findMany({
+      where: {
+        DataViaggio: {
+          IdViaggio: idViaggio
+        }
+      },
+      include: {
+        Aggiunte: true
+      }
+    })
+  }
 }
