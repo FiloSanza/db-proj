@@ -1,4 +1,4 @@
-import { PrismaClient, Recensione, Tag } from "@prisma/client";
+import { PrismaClient, Recensione, Tag, Aggiunta } from "@prisma/client";
 import { AggiuntaCreateModel, AggiuntaFilterModel } from "../dto/aggiunta";
 import { ViaggioCreateModel, ViaggioFilterModel } from "../dto/viaggio";
 import { AggiuntaService } from "./aggiunta";
@@ -351,17 +351,21 @@ export class ViaggioService extends BaseService {
       }
     })
     .then(result => {
-      return result.Upgrade.map(u => u.Aggiunta)
-          .concat(
-            result.Giornate.flatMap(
-              g => g.Visite.flatMap(
-                v => v.Upgrade.flatMap(
-                  u => u.Aggiunta))));
+      return this._getUniqueAggiunte(result.Upgrade.map(u => u.Aggiunta)
+      .concat(
+        result.Giornate.flatMap(
+          g => g.Visite.flatMap(
+            v => v.Upgrade.flatMap(
+              u => u.Aggiunta)))));
     });
   }
 
   _getUniqueTags(tags: Tag[]) {
     return [...new Map(tags.map(t => [t.IdTag, t])).values()]
+  }
+
+  _getUniqueAggiunte(aggiunte: Aggiunta[]) {
+    return [...new Map(aggiunte.map(t => [t.IdAggiunta, t])).values()]
   }
 
   _getValutazioneMedia(recensioni: Recensione[]) {
