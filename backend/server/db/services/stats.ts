@@ -41,7 +41,7 @@ export class StatsService extends BaseService {
       else return 0;
     })[0];
 
-    
+
     let avgAggiunteViaggio = await Promise.all(viaggi.map(v => this._getPrezzoAggiunteViaggio(v)));
 
     console.log(avgAggiunteViaggio);
@@ -79,16 +79,10 @@ export class StatsService extends BaseService {
     console.log("viaggio: ", viaggio.idViaggio);
 
     let prenotazioni = await prenotazioneService.getForViaggio(viaggio.idViaggio);
-    let countAggiunte = await viaggioService.countAllUpgrades(viaggio.idViaggio);
-
-    console.log("prenotazioni", prenotazioni);
-    console.log("countAggiunte", countAggiunte);
       
     let prezzoAggiunte = (await Promise.all(prenotazioni
-      .flatMap(p => p.Aggiunte)
-      .map(async a => (await aggiuntaService.getPrezzoAggiunta(a.IdAggiunta)) * countAggiunte[a.IdAggiunta])));
-
-    console.log("prezzo aggiunte", prezzoAggiunte);
+      .flatMap(p => prenotazioneService.getPrezzoAggiunte(p.IdPrenotazione))
+    ));
     
     return {
       idViaggio: viaggio.idViaggio,

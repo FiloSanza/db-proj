@@ -27,7 +27,7 @@ const App = () => (
         <AgenziaNavbar />
         <div className="bg-light p-5">
           <Routes>
-            <Route path="/" element={<h1>CIAO</h1>} />
+            <Route path="/" element={<h1>HOME PAGE</h1>} />
             <Route path="/tag" element={<TagController />} />
             <Route path="/citta" element={<CittaController />} />
             <Route path="/guide" element={<GuideController />} />

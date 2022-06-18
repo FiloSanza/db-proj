@@ -97,13 +97,34 @@ export class PrenotazioneService extends BaseService {
       return prenotazione;
     });
   }
-  
+
   getAll(filter: PrenotazioneFilterModel) {
     return this._prisma.prenotazione.findMany({
       where: filter.getFilterDict()
     });
   }
 
+  getPrezzoAggiunte(id: number) {
+    return this._prisma.prenotazione.findUnique({
+      where: { IdPrenotazione: id },
+      include: {
+        DataViaggio: {
+          include: {
+            Sconto: true
+          }
+        },
+        Aggiunte: true
+      } 
+    }).then(res => {
+      let prezzoTotale = res.PrezzoTotale.toNumber();
+      let sconto = (res.DataViaggio?.Sconto.Percentuale) ?? 0;
+      let prezzoBase = res.DataViaggio.PrezzoBase.toNumber();
+      console.log(`Prezzo ${id} ${prezzoTotale - (1 - sconto/100) * prezzoBase}`);
+      
+      return prezzoTotale - (1 - sconto/100) * prezzoBase;
+    })
+  }
+  
   getForCliente(email: string) {
     return this._prisma.prenotazione.findMany({
       where: {
