@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { PrenotazioneCreateModel, PrenotazioneFilterModel } from "../dto/prenotazione";
 import { AggiuntaService } from "./aggiunta";
 import { BaseService } from "./base";
+import { ClienteService } from "./cliente";
 import { DataViaggioService } from "./dataviaggio";
 import { ViaggioService } from "./viaggio";
 
@@ -25,10 +26,48 @@ export class PrenotazioneService extends BaseService {
           IdDataViaggio: data.idDataViaggio
         },
         select: {
-          Viaggio: true,
+          Viaggio: {
+            select: {
+              Giornate: true,
+              Descrizione: true,
+              IdViaggio: true,
+              IdPeriodo: true
+            }
+          },
           DataPartenza: true
         }
       });
+
+      //controllo che non ci siano sovrapposizioni nelle prenotazioni
+      let prenotazioni = await prisma.prenotazione.findMany({
+        where: { Cliente: { Email: data.email }},
+        include: {
+          DataViaggio: {
+            include: {
+              Viaggio: {
+                include: {
+                  Giornate: true
+                }
+              }
+            }
+          }
+        }
+      }).then(results => results.map(res => {
+        let fine = new Date(res.DataViaggio.DataPartenza.valueOf());       
+        fine.setDate(fine.getDate() + res.DataViaggio.Viaggio.Giornate.length);
+        return {
+          dataInizio: res.DataViaggio.DataPartenza,
+          dataFine: fine
+        };
+      }));
+
+      let inizio = dataViaggio.DataPartenza;
+      let fine = new Date(dataViaggio.DataPartenza.valueOf());
+      fine.setDate(fine.getDate() + dataViaggio.Viaggio.Giornate.length);
+      let doNotOverlap = prenotazioni.every(p => !((p.dataInizio <= inizio && inizio <= p.dataFine) || (inizio <= p.dataInizio && p.dataInizio <= fine)));
+      if (!doNotOverlap) {
+        throw new Error("Prenotazioni sovrapposte");
+      }
 
       if ((new Date()).getTime() > dataViaggio.DataPartenza.getTime()) {
         throw new Error("Impossibile prenotare un viaggio gia partito");
@@ -68,6 +107,8 @@ export class PrenotazioneService extends BaseService {
       if (!valid) {
         throw new Error("Ci sono delle prenotazioni sovrapposte.");
       }
+
+      console.log(data);
 
       //Creo la prenotazione
       let prenotazione = await prisma.prenotazione.create({

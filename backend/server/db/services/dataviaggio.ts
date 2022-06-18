@@ -3,29 +3,66 @@ import { BaseService } from "./base";
 
 export class DataViaggioService extends BaseService {
   create(data: DataViaggioCreateModel) {
-    return this._prisma.dataViaggio.create({
-      data: {
-        DataPartenza: data.dataPartenza,
-        Posti: data.posti,
-        PrezzoBase: data.prezzoBase,
-        Sconto: {
-          connectOrCreate: {
-            where: {
-              Percentuale: data.sconto
-            },
-            create: {
-              Percentuale: data.sconto
+    return this._prisma.$transaction(async prisma => {
+      let viaggiGuida = await prisma.dataViaggio.findMany({
+        where: { IdGuida: data.idGuida },
+        include: {
+          Viaggio: {
+            include: {
+              Giornate: true
             }
           }
-        },
-        Guida: {
-          connect: { IdGuida: data.idGuida }
-        },
-        Viaggio: {
-          connect: { IdViaggio: data.idViaggio }
         }
+      }).then(results => results.map(res => {
+        let fine = new Date(res.DataPartenza.valueOf());
+        fine.setDate(fine.getDate() + res.Viaggio.Giornate.length);
+        return {
+          dataInizio: res.DataPartenza,
+          dataFine: fine
+        };
+      }));
+
+      let viaggio = await prisma.viaggio.findUnique({
+        where: { IdViaggio: data.idViaggio },
+        include: {
+          Giornate: true
+        }
+      });
+
+      let inizio = data.dataPartenza;
+      let fine = new Date(data.dataPartenza.valueOf());
+      fine.setDate(fine.getDate() + viaggio.Giornate.length);
+
+      let valid = viaggiGuida.every(dv => !((inizio <= dv.dataInizio && dv.dataInizio <= fine) || (dv.dataInizio <= inizio && inizio <= dv.dataFine)));
+
+      if (!valid) {
+        throw new Error("Sovrapposizioni");
       }
-    });
+
+      return prisma.dataViaggio.create({
+        data: {
+          DataPartenza: data.dataPartenza,
+          Posti: data.posti,
+          PrezzoBase: data.prezzoBase,
+          Sconto: {
+            connectOrCreate: {
+              where: {
+                Percentuale: data.sconto
+              },
+              create: {
+                Percentuale: data.sconto
+              }
+            }
+          },
+          Guida: {
+            connect: { IdGuida: data.idGuida }
+          },
+          Viaggio: {
+            connect: { IdViaggio: data.idViaggio }
+          }
+        }
+      });
+    })
   }
   
   getAll(filter: DataViaggioFilterModel) {
