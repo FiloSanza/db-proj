@@ -23,7 +23,7 @@ const StatsController = () => {
 			.catch(err => console.log(err))
 	}
 
-  if (!isGuidaLogged()) return <strong>Fai il login prima di visualizzare questa pagina.</strong>
+  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visualizzare la pagina.</strong>
 
   return (
     <>
