@@ -30,7 +30,7 @@ const PrenotazioneController = () => {
 	}
 
 	if (!prenotazioni) return null
-  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visuallizare la pagina.</strong>
+  if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visualizzare la pagina.</strong>
 
 	return (
       <>
