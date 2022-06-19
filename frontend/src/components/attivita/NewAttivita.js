@@ -69,6 +69,7 @@ const NewAttivita = ({ attivitaData = {}, postAttivita, data }) => {
               data.tags.map(c => <option key={c.IdTag} value={c.IdTag}>{c.Descrizione}</option>)
           }
         </Form.Select>
+        <small>Tieni premuto CTRL per selezionare più tag.</small>
       </Form.Group>
       <Button variant="primary" type="submit">
         Crea

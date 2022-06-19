@@ -23,10 +23,12 @@ const CittaController = () => {
 	}
 
 	const getCitta = () => {
-		api
+    api
 			.get(`${url}`)
-			.then(res => setCitta(res))
-			.catch(err => console.log(err))
+			.then(res => {
+        setCitta(res.sort((a,b) => a.IdCitta-b.IdCitta));
+      })
+			.catch(err => console.log(err));
 	}
 
 	if (!citta) return null
@@ -51,12 +53,12 @@ const CittaController = () => {
         </thead>
         <tbody>
           { citta &&
-            Array.from(citta).map(c => 
+            citta.map(c => 
               <tr key={c.IdCitta}>
                 <td> { c.IdCitta } </td>
                 <td> { c.Nome } </td>
               </tr>
-            )
+            ).sort((c1,c2) => c1.IdCitta-c2.IdCitta)
           }
         </tbody>
       </Table>
