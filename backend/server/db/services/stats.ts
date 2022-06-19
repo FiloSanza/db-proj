@@ -23,24 +23,20 @@ export class StatsService extends BaseService {
     }).then(results => results.map(r => ({
       guida: r.Email,
       valutazioneMedia: this._getMedia(r.Viaggi.flatMap(v => v.Prenotazioni.filter(p => p.Recensione).map(p => p.Recensione.Valutazione)))
-    })).sort((a, b) => {
-      if (a.valutazioneMedia < b.valutazioneMedia) return 1;
-      else if (a.valutazioneMedia > b.valutazioneMedia) -1;
-      else return 0;
-    }));
-    let bestGuida = guide[0];
+    })));
+
+    let sortGuide = [...guide.entries()].map(e => e[1]).sort(function(a, b){return b.valutazioneMedia-a.valutazioneMedia});
+    let bestGuida = sortGuide[0];
     
     let viaggi = await viaggioService.getAll(new ViaggioFilterModel());
-    let bestViaggio = viaggi.map(v => ({
+    let viaggio = viaggi.map(v => ({
       idViaggio: v.idViaggio, 
       descrizione: v.descrizione, 
       valutazione: v.valutazione})
-    ).sort((a, b) => {
-      if (a.valutazione < b.valutazione) return 1;
-      else if (a.valutazione > b.valutazione) return -1;
-      else return 0;
-    })[0];
-
+    );
+    
+    let sortViaggi = [...viaggi.entries()].map(e => e[1]).sort(function(a, b){return b.valutazione-a.valutazione});    
+    let bestViaggio = sortViaggi[0];
 
     let avgAggiunteViaggio = await Promise.all(viaggi.map(v => this._getPrezzoAggiunteViaggio(v)));
 
@@ -56,7 +52,7 @@ export class StatsService extends BaseService {
     let spesaClienti = (await prenotazioneService.getSpesaMediaPerCliente())
     let spesaTotaleClienti = spesaClienti.map(x => x._sum.PrezzoTotale.toNumber())
       .reduce((a, b) => a + b, 0);
-
+    
     return {
       valutazioneViaggio: bestViaggio,
       valutazioneGuida: bestGuida,

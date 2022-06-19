@@ -58,7 +58,7 @@ const CittaController = () => {
                 <td> { c.IdCitta } </td>
                 <td> { c.Nome } </td>
               </tr>
-            ).sort((c1,c2) => c1.IdCitta-c2.IdCitta)
+            )
           }
         </tbody>
       </Table>
