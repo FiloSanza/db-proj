@@ -15,7 +15,8 @@ const ClientiController = () => {
     cognome: "",
     dataNascita: "",
     email: "",
-    viaggi: []
+    viaggi: [],
+    viaggioInCorso: null
   });
   
 	const url = "http://localhost:8080/api/cliente"
@@ -121,6 +122,24 @@ const ClientiController = () => {
                     </Card.Body>
                   </Card>
                 )
+              }
+            </>
+          }
+          {
+            (details.viaggioInCorso && details.viaggioInCorso.length > 0) &&
+            <>
+              <h3>Viaggio in corso</h3>
+              {
+                details.viaggioInCorso.map(a => {
+                  <Card key={a.idVisita}>
+                    <Card.Body>
+                      <Card.Title>{a.descrizione}</Card.Title>
+                      <Card.Text>
+                        <strong>Data: </strong> {a.inizio}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                })
               }
             </>
           }

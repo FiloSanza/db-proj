@@ -25,28 +25,24 @@ export class ClienteService extends BaseService {
       where: {
         IdCliente: id
       },
-      select: {
-        IdCliente: true,
-        Nome: true,
-        Cognome: true,
-        Email: true,
-        DataNascita: true,
+      include: {
         Prenotazioni: {
-          select: {
-            IdPrenotazione: true,
+          include: {
             Recensione: true,
-            DataAcquisto: true,
             DataViaggio: {
-              select: {
-                DataPartenza: true,
-                Guida: {
-                  select: {
-                    Email: true
-                  }
-                },
+              include: {
+                Guida: true,
                 Viaggio: {
-                  select: {
-                    Descrizione: true
+                  include: {
+                    Giornate: {
+                      include: {
+                        Visite: {
+                          include: {
+                            Attivita: true
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -54,23 +50,52 @@ export class ClienteService extends BaseService {
           },
         }
       }
-    }).then(res => ({ 
-      idCliente: res.IdCliente,
-      nome: res.Nome,
-      cognome: res.Cognome,
-      dataNascita: res.DataNascita,
-      email: res.Email,
-      prenotazioni: res.Prenotazioni.map(p => ({
-        idPrenotazione: p.IdPrenotazione,
-        dataAcquisto: p.DataAcquisto,
-        viaggio: p.DataViaggio.Viaggio.Descrizione,
-        guida: p.DataViaggio.Guida.Email,
-        partenza: p.DataViaggio.DataPartenza,
-        recensione: {
-          valutazione: p.Recensione?.Valutazione,
-          descrizione: p.Recensione?.Descrizione
-        }
-      })).sort((a, b) => b.partenza.getTime() - a.partenza.getTime())
-    }))
+    }).then(res => {
+      let current = res.Prenotazioni.find(p => {
+        let fine = new Date(p.DataViaggio.DataPartenza.valueOf());
+        fine.setDate(fine.getDate() + p.DataViaggio.Viaggio.Giornate.length - 1);
+
+        return p.DataViaggio.DataPartenza <= new Date() && new Date <= fine;
+      });
+
+      let viaggioInCorso = null;
+
+      if (current) {
+        let inizio = current.DataViaggio.DataPartenza;
+        viaggioInCorso = current.DataViaggio.Viaggio.Giornate.flatMap(g => {
+          let inizioGiornata = new Date(inizio.valueOf());
+          inizioGiornata.setDate(inizio.getDate() + g.Numero - 1);
+          return g.Visite.map(v => {
+            let inizioVisita = new Date(inizioGiornata.valueOf());
+            inizioVisita.setTime(v.Ora * 1000 * 60 * 60);
+            return {
+              idVisita: v.IdVisita,
+              descrizione: v.Attivita.Descrizione,
+              inizio: inizioVisita
+            };
+          })
+        }).filter(visita => visita.inizio > new Date());
+      }
+      
+      return { 
+        idCliente: res.IdCliente,
+        nome: res.Nome,
+        cognome: res.Cognome,
+        dataNascita: res.DataNascita,
+        email: res.Email,
+        prenotazioni: res.Prenotazioni.map(p => ({
+          idPrenotazione: p.IdPrenotazione,
+          dataAcquisto: p.DataAcquisto,
+          viaggio: p.DataViaggio.Viaggio.Descrizione,
+          guida: p.DataViaggio.Guida.Email,
+          partenza: p.DataViaggio.DataPartenza,
+          viaggioInCorso: viaggioInCorso,
+          recensione: {
+            valutazione: p.Recensione?.Valutazione,
+            descrizione: p.Recensione?.Descrizione
+          }
+        })).sort((a, b) => b.partenza.getTime() - a.partenza.getTime())
+      };
+    })
   }
 }
