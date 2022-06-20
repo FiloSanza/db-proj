@@ -141,7 +141,10 @@ export class PrenotazioneService extends BaseService {
 
   getAll(filter: PrenotazioneFilterModel) {
     return this._prisma.prenotazione.findMany({
-      where: filter.getFilterDict()
+      where: filter.getFilterDict(),
+      include: {
+        Cliente: true
+      }
     });
   }
 
