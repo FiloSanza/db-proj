@@ -123,6 +123,9 @@ const ListViaggi = () => {
                 tags.map(c => <option key={c.IdTag} value={c.IdTag}>{c.Descrizione}</option>)
             }
           </Form.Select>
+          <small>Premi uno o più tag per filtrare i viaggi.</small>
+          <br />
+          <small>Tieni premuto CTRL per selezionare più tag.</small>
         </Form.Group>
         </Form>
         <Table striped>

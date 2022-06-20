@@ -52,6 +52,7 @@ const NewVisita = ({ idx, id, updateVisite, attivita, upgrade, numeroGiornata })
                 upgrade.map(u => <option key={u.IdAggiunta} value={u.IdAggiunta}>{u.Descrizione} - {u.Prezzo}€</option>)
             }
           </Form.Select>
+          <small>Tieni premuto CTRL per selezionare più tag.</small>
         </Form.Group>
       </Form>
     </>
