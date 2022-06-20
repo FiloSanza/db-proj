@@ -92,6 +92,7 @@ const NewPrenotazione = ({ prenotazioneData = {}, postPrenotazione }) => {
               details.aggiunte.map(p => <option key={p.IdAggiunta} value={p.IdAggiunta}>{p.Descrizione} - {p.Prezzo}</option>)
           }
         </Form.Select>
+        <small>Tieni premuto CTRL per selezionare più tag.</small>
       </Form.Group>
       <Button variant="primary" type="submit">
         Crea
