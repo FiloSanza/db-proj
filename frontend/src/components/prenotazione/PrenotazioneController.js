@@ -32,6 +32,8 @@ const PrenotazioneController = () => {
 	if (!prenotazioni) return null
   if (!isGuidaLogged()) return <strong>Fai l'accesso come guida prima di visualizzare la pagina.</strong>
 
+  console.log(prenotazioni);
+
 	return (
       <>
       <h3>Nuova Prenotazione</h3>
@@ -43,7 +45,11 @@ const PrenotazioneController = () => {
         <Table striped>
           <thead>
             <tr>
-              {(prenotazioni && prenotazioni.length > 0) && Object.keys(prenotazioni[0]).map(k => <th key={k}>{ k }</th>)}
+              <td>IdPrenotazione</td>
+              <td>Cliente</td>
+              <td>Data Acquisto</td>
+              <td>IdDataViaggio</td>
+              <td>Prezzo Totale</td>
             </tr>
           </thead>
           <tbody>
@@ -51,9 +57,9 @@ const PrenotazioneController = () => {
               prenotazioni.map(p => 
               <tr key={p.IdPrenotazione}>
                   <td> { p.IdPrenotazione } </td>
-                  <td> { p.IdCliente } </td>
-                  <td> { p.IdCliente } </td>
+                  <td> { p.Cliente.Email } </td>
                   <td> { (new Date(p.DataAcquisto)).toLocaleDateString("it-IT") } </td>
+                  <td> { p.IdDataViaggio } </td>
                   <td> { p.PrezzoTotale } </td>
               </tr>
               )
