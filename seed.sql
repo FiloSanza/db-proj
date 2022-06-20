@@ -1,3 +1,5 @@
+USE agenzia;
+
 -- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
 -- Host: localhost    Database: agenzia

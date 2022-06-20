@@ -19,6 +19,12 @@ non si voglia usare il file seed.sql, si consiglia di aggiungere una guida a man
 da usare per accedere all'applicativo. 
     Per l'aggiunta di una guida: INSERT INTO GUIDA (Nome, Cognome, DataNascita, Email) VALUES (?, ?, ?, ?);
 
+-- ESECUZIONE
+
+Bisogna eseguire in modo simultaneo i seguenti comandi:
+    - "npm run dev" dentro "backend"
+    - "npm start" dentro "frontend"
+
 -- UTILIZZO
 
 Inizialmente è necessario fare login prima di visualizzare o aggiungere i dati.
