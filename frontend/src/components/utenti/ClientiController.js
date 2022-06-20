@@ -130,16 +130,16 @@ const ClientiController = () => {
             <>
               <h3>Viaggio in corso</h3>
               {
-                details.viaggioInCorso.map(a => {
+                details.viaggioInCorso.map(a => (
                   <Card key={a.idVisita}>
                     <Card.Body>
                       <Card.Title>{a.descrizione}</Card.Title>
                       <Card.Text>
-                        <strong>Data: </strong> {a.inizio}
+                        <strong>Data: </strong> {(new Date(a.inizio)).toLocaleDateString("it-IT")} - h{(new Date(a.inizio)).getUTCHours()}
                       </Card.Text>
                     </Card.Body>
                   </Card>
-                })
+                ))
               }
             </>
           }

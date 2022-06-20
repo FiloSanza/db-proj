@@ -1,5 +1,4 @@
 import { ClienteFilterModel, ClienteCreateModel } from "../dto/cliente";
-import { RecensioneCreateModel } from "../dto/recensione";
 import { BaseService } from "./base";
 
 export class ClienteService extends BaseService {
@@ -67,7 +66,7 @@ export class ClienteService extends BaseService {
           inizioGiornata.setDate(inizio.getDate() + g.Numero - 1);
           return g.Visite.map(v => {
             let inizioVisita = new Date(inizioGiornata.valueOf());
-            inizioVisita.setTime(v.Ora * 1000 * 60 * 60);
+            inizioVisita.setTime(inizioGiornata.getTime() + v.Ora * 1000 * 60 * 60);
             return {
               idVisita: v.IdVisita,
               descrizione: v.Attivita.Descrizione,
@@ -75,6 +74,8 @@ export class ClienteService extends BaseService {
             };
           })
         }).filter(visita => visita.inizio > new Date());
+
+        console.log(viaggioInCorso);
       }
       
       return { 
@@ -83,13 +84,13 @@ export class ClienteService extends BaseService {
         cognome: res.Cognome,
         dataNascita: res.DataNascita,
         email: res.Email,
+        viaggioInCorso: viaggioInCorso,
         prenotazioni: res.Prenotazioni.map(p => ({
           idPrenotazione: p.IdPrenotazione,
           dataAcquisto: p.DataAcquisto,
           viaggio: p.DataViaggio.Viaggio.Descrizione,
           guida: p.DataViaggio.Guida.Email,
           partenza: p.DataViaggio.DataPartenza,
-          viaggioInCorso: viaggioInCorso,
           recensione: {
             valutazione: p.Recensione?.Valutazione,
             descrizione: p.Recensione?.Descrizione
