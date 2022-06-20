@@ -27,6 +27,8 @@ In caso di credenziali corrette verrà mostrato un messaggio simile a "Hai fatto
 Ogni pagina permetterà di visualizzare e/o aggiungere istanze relative alla pagina selezionata. A seconda del tipo di 
 utente potrebbe non essere disponibili tutte le funzionalità (es: Cliente non può aggiungere viaggi, e Guida non può 
 creare recensioni).
+Nel caso invece si usi seed.sql, si consiglia di fare login come guida per poter visualizzare tutte le operazioni possibili,
+nel caso una mail che si può usare è: mario.rossi@libero.it
 
 In caso di operazioni di aggiunta eseguite con successo si potrà vedere la nuova istanza nella tabella di visualizzazione.
 
