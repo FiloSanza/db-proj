@@ -194,6 +194,7 @@ const CreateViaggio = () => {
                 data.aggiunteViaggio.map(a => <option key={a.IdAggiunta} value={a.IdAggiunta}>{a.Descrizione}</option>)
             }
           </Form.Select>
+          <small>Tieni premuto CTRL per selezionare più tag.</small>
         </Form.Group>
       </Form>
 
