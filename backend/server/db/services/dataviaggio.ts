@@ -1,5 +1,7 @@
+import { PrismaClient } from "@prisma/client";
 import { DataViaggioCreateModel, DataViaggioFilterModel } from "../dto/dataviaggio";
 import { BaseService } from "./base";
+import { ViaggioService } from "./viaggio";
 
 export class DataViaggioService extends BaseService {
   create(data: DataViaggioCreateModel) {
@@ -22,16 +24,21 @@ export class DataViaggioService extends BaseService {
         };
       }));
 
-      let viaggio = await prisma.viaggio.findUnique({
-        where: { IdViaggio: data.idViaggio },
-        include: {
-          Giornate: true
-        }
-      });
+      let viaggioService = new ViaggioService(prisma as PrismaClient);
+      let viaggio = await viaggioService.getDetails(data.idViaggio);
+
+      let periodo = viaggio.periodo;
+    
+      if ((data.dataPartenza.getMonth() < periodo.meseInizio) || 
+          (data.dataPartenza.getMonth() === periodo.meseInizio && data.dataPartenza.getDay() < periodo.giornoInizio) ||
+          (data.dataPartenza.getMonth() > periodo.meseFine) ||
+          (data.dataPartenza.getMonth() === periodo.meseFine && data.dataPartenza.getDay() > periodo.giornoFine)) {
+        throw Error("Data non permessa");
+      }
 
       let inizio = data.dataPartenza;
       let fine = new Date(data.dataPartenza.valueOf());
-      fine.setDate(fine.getDate() + viaggio.Giornate.length);
+      fine.setDate(fine.getDate() + viaggio.giornate.length);
 
       let valid = viaggiGuida.every(dv => !((inizio <= dv.dataInizio && dv.dataInizio <= fine) || (dv.dataInizio <= inizio && inizio <= dv.dataFine)));
 
